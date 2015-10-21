@@ -1,0 +1,42 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.ubbcluj.canvasAndroid.view.activity.CourseActivity$PlaceholderFragment" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".DashBoardActivity" >
+		<android.support.v4.widget.SwipeRefreshLayout
+  			 android:id="@+id/swipe"
+  			 android:layout_width="match_parent"
+       		 android:layout_height="match_parent">
+       		 <ListView
+        	    android:id="@+id/list"
+       		    android:layout_width="match_parent"
+        	    android:layout_height="match_parent"
+        	     >
+       		 </ListView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/linProg"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="top"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ProgressBar
+            android:id="@+id/pbHeaderProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" >
+        </ProgressBar>
+    </LinearLayout>
+
+</FrameLayout><!-- From: file:/F:/Java/Canvas/app/src/main/res/layout/fragment_assignment.xml -->

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\Csenge\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.1\support-annotations-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
+        <dex dex="F:\Java\Canvas\app\build\intermediates\pre-dexed\debug\support-annotations-23.0.1-410fc0ab01fb82a54fa2b342713237c685b846aa.jar" />
+    </item>
+    <item
+        jar="F:\Java\Canvas\app\build\intermediates\exploded-aar\com.android.support\design\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="e5c61a3169221a89654ffcaaed47bba51cf071ad">
+        <dex dex="F:\Java\Canvas\app\build\intermediates\pre-dexed\debug\classes-0efd514b2ab8e829d042ff5e8d16c9775326cb40.jar" />
+    </item>
+    <item
+        jar="C:\Users\Csenge\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3\5fc52c41ef0239d1093a1eb7c3697036183677ce\gson-2.3.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="5fc52c41ef0239d1093a1eb7c3697036183677ce">
+        <dex dex="F:\Java\Canvas\app\build\intermediates\pre-dexed\debug\gson-2.3-8e3f27ff5cb5019e6cd5fccf7464c7fb6058bb1a.jar" />
+    </item>
+    <item
+        jar="F:\Java\Canvas\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\libs\internal_impl-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
+        <dex dex="F:\Java\Canvas\app\build\intermediates\pre-dexed\debug\internal_impl-23.0.1-deff685d8f968f195fce1e56570dbfc759cdcebd.jar" />
+    </item>
+    <item
+        jar="F:\Java\Canvas\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="F:\Java\Canvas\app\build\intermediates\pre-dexed\debug\classes-adbf8c95b9fb492add48a370da634d993a57a075.jar" />
+    </item>
+    <item
+        jar="F:\Java\Canvas\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="F:\Java\Canvas\app\build\intermediates\pre-dexed\debug\classes-7c04cfafcd66aea7c5e4809210b1a12ee4d56edd.jar" />
+    </item>
+
+</items>
