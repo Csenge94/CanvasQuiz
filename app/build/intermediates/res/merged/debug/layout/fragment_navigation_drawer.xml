@@ -1,0 +1,10 @@
+<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:choiceMode="singleChoice"
+    android:ellipsize="end"
+    android:background="@color/actionBarColor"
+    android:listSelector="@android:color/darker_gray"
+    tools:context="edu.ubbcluj.canvasAndroid.view.activity.NavigationDrawerFragment" />
+<!-- From: file:/C:/Users/Nagy/IIIev/Csoportos/Repository/new/canvasandroid/app/src/main/res/layout/fragment_navigation_drawer.xml -->

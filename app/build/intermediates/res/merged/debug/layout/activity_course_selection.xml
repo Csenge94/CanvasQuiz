@@ -1,0 +1,14 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.ubbcluj.canvasAndroid.view.activity.CourseSelectionActivity" >
+
+  	<ListView
+      android:id="@+id/courselist"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" >
+    </ListView>
+
+</RelativeLayout>
+<!-- From: file:/C:/Users/Nagy/IIIev/Csoportos/Repository/new/canvasandroid/app/src/main/res/layout/activity_course_selection.xml -->
