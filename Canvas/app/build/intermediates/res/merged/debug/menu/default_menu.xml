@@ -11,4 +11,4 @@
         android:id="@+id/logout"
         android:title="@string/menu_logout"/>
 
-</menu><!-- From: file:/F:/Java/Canvas/app/src/main/res/menu/default_menu.xml -->
+</menu><!-- From: file:/F:/Csoportos/CanvasQuiz-ubbse2015/Canvas/app/src/main/res/menu/default_menu.xml -->
