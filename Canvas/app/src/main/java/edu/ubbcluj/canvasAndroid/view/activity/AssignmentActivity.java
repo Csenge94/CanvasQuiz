@@ -202,7 +202,7 @@ public class AssignmentActivity extends BaseActivity {
                         queryAsyncTask = ((AsyncTask<String, Void, String>) assignmentController);
                         queryAsyncTask.execute(new String[]{PropertyProvider
                                 .getProperty("url")
-                                + "/api/v1/courses/"
+                                //+ API
                                 + courseID + "/assignments/" + assignmentID});
                     }
                 });

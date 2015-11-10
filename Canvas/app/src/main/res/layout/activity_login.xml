@@ -68,14 +68,31 @@
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/password"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="94dp"
         android:background="@drawable/button_login"
         android:hint="@string/login"
         android:onClick="sendMessage"
         android:radius="40dip"
         android:shape="rectangle"
-        android:textSize="23sp" />
+        android:textSize="23sp"
+        android:layout_alignTop="@+id/login_button"
+        android:layout_toLeftOf="@+id/password"
+        android:layout_toStartOf="@+id/password" />
 
+    <Button
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_login"
+        android:hint=""
+        android:onClick="sendMessage1"
+        android:radius="40dip"
+        android:shape="rectangle"
+        android:textSize="23sp"
+        android:layout_marginBottom="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/password"
+        android:layout_alignEnd="@+id/password"
+        android:layout_marginRight="0dp"
+        android:layout_marginEnd="47dp"
+        android:text="@string/Atmenet_URL_Port" />
 </RelativeLayout>

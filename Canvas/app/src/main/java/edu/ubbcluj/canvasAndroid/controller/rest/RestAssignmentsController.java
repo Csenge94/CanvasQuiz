@@ -88,6 +88,7 @@ public class RestAssignmentsController extends AsyncTask<String, Void, String>
         data = new ArrayList<>();
 
         // Decode JSON data and getting an ActivityStream array
+        Log.e("JSON E", response);
         String jsonSource = response.replace("while(1);", "");
 
         if (jsonSource.startsWith("[")) {

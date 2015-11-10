@@ -42,4 +42,10 @@
     <string name="add_comment">Add new comment here</string>
 	<string name="write_a_message">Write a message</string>
     <string name="message_item_send">Send</string>
+    <string name="URL">string</string>
+    <string name="string">URL</string>
+    <string name="stringPort">Port</string>
+    <string name="Atmenet_URL_Port">Url/Port</string>
+    <string name="ok_url_port">Ok</string>
+    <string name="Cancel_url_port">Cancel</string>
 </resources>

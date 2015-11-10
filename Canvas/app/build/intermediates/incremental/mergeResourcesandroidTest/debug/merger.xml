@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="F:\Csoportos\CanvasQuiz-ubbse2015\Canvas\app\src\androidTest\res"/><source path="F:\Csoportos\CanvasQuiz-ubbse2015\Canvas\app\build\generated\res\rs\androidTest\debug"/><source path="F:\Csoportos\CanvasQuiz-ubbse2015\Canvas\app\build\generated\res\resValues\androidTest\debug"/></dataSet><mergedItems/></merger>
+<merger version="3"><dataSet config="main"><source path="F:\Canvas\app\src\androidTest\res"/><source path="F:\Canvas\app\build\generated\res\rs\androidTest\debug"/><source path="F:\Canvas\app\build\generated\res\resValues\androidTest\debug"/></dataSet><mergedItems/></merger>
