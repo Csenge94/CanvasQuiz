@@ -2,46 +2,46 @@
 <items version="2" >
 
     <item
-        jar="F:\Canvas\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
-        <dex dex="F:\Canvas\app\build\intermediates\pre-dexed\debug\classes-cf887f381d225945b835394d9da5f3d7c64d2b97.jar" />
-    </item>
-    <item
-        jar="C:\Users\Covaci\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3\5fc52c41ef0239d1093a1eb7c3697036183677ce\gson-2.3.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="5fc52c41ef0239d1093a1eb7c3697036183677ce">
-        <dex dex="F:\Canvas\app\build\intermediates\pre-dexed\debug\gson-2.3-573988a3cee9a9f5ccb41cf3b063be924a671950.jar" />
-    </item>
-    <item
-        jar="F:\Canvas\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\libs\internal_impl-23.0.1.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
-        <dex dex="F:\Canvas\app\build\intermediates\pre-dexed\debug\internal_impl-23.0.1-ff7206de88fe358a1e788122aaca1c36daa4fbec.jar" />
-    </item>
-    <item
-        jar="F:\Canvas\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\classes.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
-        <dex dex="F:\Canvas\app\build\intermediates\pre-dexed\debug\classes-25e32dd5d3de6f25bfc60da9f9ef577d42e08e76.jar" />
-    </item>
-    <item
-        jar="F:\Canvas\app\build\intermediates\exploded-aar\com.android.support\design\23.0.1\jars\classes.jar"
+        jar="C:\Users\otvos\Desktop\CsoportosGit\CanvasQuiz-ubbse2015\Canvas\app\build\intermediates\exploded-aar\com.android.support\design\23.0.1\jars\classes.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="e5c61a3169221a89654ffcaaed47bba51cf071ad">
-        <dex dex="F:\Canvas\app\build\intermediates\pre-dexed\debug\classes-9170e6964e93d729ac6db980c5db4df6ba15814b.jar" />
+        <dex dex="C:\Users\otvos\Desktop\CsoportosGit\CanvasQuiz-ubbse2015\Canvas\app\build\intermediates\pre-dexed\debug\classes-0623bdf3b21b395d57338c67d840e3b63aa7b937.jar" />
     </item>
     <item
-        jar="C:\Users\Covaci\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.1\support-annotations-23.0.1.jar"
+        jar="C:\Users\otvos\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.1\support-annotations-23.0.1.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
-        <dex dex="F:\Canvas\app\build\intermediates\pre-dexed\debug\support-annotations-23.0.1-d7c1ac3ed52afe2cd2602bdf50fc2ff153a2479b.jar" />
+        <dex dex="C:\Users\otvos\Desktop\CsoportosGit\CanvasQuiz-ubbse2015\Canvas\app\build\intermediates\pre-dexed\debug\support-annotations-23.0.1-ed077933b78fc360b57fcd2004c5417b695a0caf.jar" />
+    </item>
+    <item
+        jar="C:\Users\otvos\Desktop\CsoportosGit\CanvasQuiz-ubbse2015\Canvas\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
+        <dex dex="C:\Users\otvos\Desktop\CsoportosGit\CanvasQuiz-ubbse2015\Canvas\app\build\intermediates\pre-dexed\debug\classes-14c628e206a154a5dc1b33518406d665ce1aca3d.jar" />
+    </item>
+    <item
+        jar="C:\Users\otvos\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3\5fc52c41ef0239d1093a1eb7c3697036183677ce\gson-2.3.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="5fc52c41ef0239d1093a1eb7c3697036183677ce">
+        <dex dex="C:\Users\otvos\Desktop\CsoportosGit\CanvasQuiz-ubbse2015\Canvas\app\build\intermediates\pre-dexed\debug\gson-2.3-bd5f5153d73cedca13e04bfd46c79bb85ab09302.jar" />
+    </item>
+    <item
+        jar="C:\Users\otvos\Desktop\CsoportosGit\CanvasQuiz-ubbse2015\Canvas\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\classes.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
+        <dex dex="C:\Users\otvos\Desktop\CsoportosGit\CanvasQuiz-ubbse2015\Canvas\app\build\intermediates\pre-dexed\debug\classes-8633205a07ab92ff7908c054d8f3f1269ea0a65c.jar" />
+    </item>
+    <item
+        jar="C:\Users\otvos\Desktop\CsoportosGit\CanvasQuiz-ubbse2015\Canvas\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.1\jars\libs\internal_impl-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
+        <dex dex="C:\Users\otvos\Desktop\CsoportosGit\CanvasQuiz-ubbse2015\Canvas\app\build\intermediates\pre-dexed\debug\internal_impl-23.0.1-1c9583cd938b5f8a8100545e21efdf9e0c37cd1c.jar" />
     </item>
 
 </items>

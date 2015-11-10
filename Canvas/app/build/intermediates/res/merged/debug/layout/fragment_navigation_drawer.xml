@@ -8,4 +8,4 @@
     android:listSelector="@android:color/darker_gray"
     style="@style/dividedListStyle"
     tools:context="edu.ubbcluj.canvasAndroid.view.activity.NavigationDrawerFragment" />
-<!-- From: file:/F:/Canvas/app/src/main/res/layout/fragment_navigation_drawer.xml -->
+<!-- From: file:/C:/Users/otvos/Desktop/CsoportosGit/CanvasQuiz-ubbse2015/Canvas/app/src/main/res/layout/fragment_navigation_drawer.xml -->
