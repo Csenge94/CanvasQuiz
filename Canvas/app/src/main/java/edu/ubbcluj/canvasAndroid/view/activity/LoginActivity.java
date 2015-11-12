@@ -25,7 +25,7 @@ import edu.ubbcluj.canvasAndroid.util.listener.InformationEvent;
 import edu.ubbcluj.canvasAndroid.util.listener.InformationListener;
 import edu.ubbcluj.canvasAndroid.util.network.CheckNetwork;
 import edu.ubbcluj.canvasAndroid.util.network.CheckSavedSession;
-
+import com.instructure.canvasapi.*;
 public class LoginActivity extends Activity {
 
 	private ProgressDialog dialog;
@@ -91,6 +91,7 @@ public class LoginActivity extends Activity {
 	 */
 	@SuppressWarnings("unchecked")
 	public void sendMessage(View vire) {
+		//TO DO : handle login using  com.instructure.canvasapi.*;
 		if (!CheckNetwork.isNetworkOnline(this)) {
 			Toast.makeText(this, "No network connection!",
 					Toast.LENGTH_LONG).show();

@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
@@ -8,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "edu.ubbcluj.canvasAndroid"
-        minSdkVersion 8
+        minSdkVersion 9
         targetSdkVersion 23
     }
 
@@ -24,5 +23,5 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3'
     compile 'org.apache.httpcomponents:httpclient:4.3.5'
     compile 'com.android.support:appcompat-v7:23.0.1'
-    compile 'com.android.support:design:23.0.1'
+    compile 'com.instructure:CanvasAPI:1.2.1@aar'
 }
