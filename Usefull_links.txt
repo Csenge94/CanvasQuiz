@@ -1,0 +1,6 @@
+	
+		usefull links:
+		 CanvasApi live: https://canvas.cs.ubbcluj.ro/doc/api/live
+		 Integration: https://www.youtube.com/watch?v=4iQM-aILJPI
+		 General docs: https://canvas.instructure.com/doc/api/file.compound_documents.html
+	
