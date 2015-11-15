@@ -10,12 +10,15 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.instructure.canvasapi.api.CourseAPI;
+import com.instructure.canvasapi.api.OAuthAPI;
 import com.instructure.canvasapi.model.CanvasError;
 import com.instructure.canvasapi.model.Course;
+import com.instructure.canvasapi.model.OAuthToken;
 import com.instructure.canvasapi.utilities.*;
 
 import edu.ubbcluj.canvasAndroid.R;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class ExampleActivity extends Activity implements APIStatusDelegate, ErrorDelegate {
     /**
@@ -26,7 +29,7 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
     //http://guides.instructure.com/s/2204/m/4214/l/40399-how-do-i-obtain-an-api-access-token
 
     public final static String DOMAIN = "canvas.cs.ubbcluj.ro";
-    public final static String TOKEN = "ZzJUOBf7CxiXYHjU5n18nJc03IwFsu2IoCsPHfGtwZxn4c85UmkqeFl4JS1PAwnM";
+    public static String TOKEN; //= "ZEDfHzikIRNMR3MlfVDBFmB1WoYLr1ywAY6GlcQQcXLjhnIBA5vSPQaApd5nAbIL";
 
     public final static String SECTION_DIVIDER = " \n \n ------------------- \n \n";
 
@@ -47,6 +50,27 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
         loadNextURLButton = (Button) findViewById(R.id.loadNextPage);
         scrollView = (ScrollView) findViewById(R.id.scrollview);
 
+        Log.d(APIHelpers.LOG_TAG,"onCreate! heere I am!!!!!!");
+        String iD = "10000000000002";
+        String devKey = "ru1UrVTFK3mHtiiVHiZghZqWQXNg12oOjjNjAyTcFBmEjlxGXm6yes7Ho4iPxGfH";
+        String authUrl = "https://canvas.cs.ubbcluj.ro/login/oauth2/auth?client_id=10000000000002&response_type=code&redirect_uri=http://kikellcserelni";
+        String authResponseCode = "2f94f15760bf8f4b1298ada60ac46140d3d9cd8b46b6d3a733cdd6bf7ea6c0a0e38a45904fba8f601e80ba968b81c0e04ad50351d306a10c613fd1a4ad809446";
+
+        //REPLACE THE authResponseCode WITH THE ONE THAT YOU OBTAINED FROM THE authUrl WHEN YOU TYPE IT IN THE BROWSER. THE VALUE ABOVE HAS EXPIRED AND YOURS WILL BE AVAILABLE ONLY ONCE AS WELL
+
+        OAuthAPI.getToken(iD, devKey, authResponseCode, new CanvasCallback<OAuthToken>(this) {
+            @Override
+            public void cache(OAuthToken oAuthToken) {
+
+            }
+
+            @Override
+            public void firstPage(OAuthToken oAuthToken, LinkHeaders linkHeaders, Response response) {
+                Log.d(APIHelpers.LOG_TAG, oAuthToken.getAccess_token());
+                TOKEN = oAuthToken.getAccess_token();
+                makeAPICall();
+            }
+        });
         //Set up CanvasAPI
         setUpCanvasAPI();
 
@@ -79,7 +103,6 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
             }
         };
 
-
         //If they press the button, make an API call.
         loadNextURLButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,9 +110,6 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
                 makeAPICall();
             }
         });
-
-        //Make the actual API call.
-        makeAPICall();
     }
 
     /**
