@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"  android:shape="rectangle">
-     <solid android:color="#8F8F8F"/>
-</shape>
-
-<!-- From: file:/C:/Users/otvos/Desktop/CsoportosGit/CanvasQuiz-ubbse2015/Canvas/app/src/main/res/drawable/separator.xml -->

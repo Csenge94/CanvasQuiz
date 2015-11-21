@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.instructure.example.MainActivity"
+    tools:ignore="MergeRootFrame" >
+
+    <Button
+        android:layout_margin="5dip"
+        android:id="@+id/loadNextPage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Load Next Page"
+        android:visibility="invisible"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:id="@+id/login2button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="52dp">
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/output"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/loadNextPage"
+        android:layout_alignEnd="@+id/loadNextPage"
+        android:layout_above="@+id/scrollview"
+        android:layout_below="@+id/loadNextPage" />
+
+
+</RelativeLayout>
