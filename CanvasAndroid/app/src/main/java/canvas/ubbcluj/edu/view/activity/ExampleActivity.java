@@ -94,6 +94,7 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
                 makeAPICall();
             }
         });
+		
         final ExampleActivity exampleAc = this;
 
         Button loginButton = (Button) findViewById(R.id.login2button);

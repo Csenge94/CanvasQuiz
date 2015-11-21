@@ -6,6 +6,7 @@
     tools:context="com.instructure.example.MainActivity"
     tools:ignore="MergeRootFrame" >
 
+	
     <Button
         android:layout_margin="5dip"
         android:id="@+id/loadNextPage"

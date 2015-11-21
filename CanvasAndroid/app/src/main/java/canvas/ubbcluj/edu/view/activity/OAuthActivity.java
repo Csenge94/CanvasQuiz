@@ -3,7 +3,7 @@ package edu.ubbcluj.canvasAndroid.view.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatActivity; 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
@@ -41,7 +41,8 @@ public class OAuthActivity extends Activity {
                     Intent result = new Intent();
                     result.putExtra("code", code);
                     setResult(RESULT_OK, result);
-                    finish();
+                    finish(); 
+					
                 }
             }
         });
