@@ -36,7 +36,6 @@ public class OAuthActivity extends Activity {
             public void onPageFinished(WebView view, String url) {
                 String code = getUrlParameter(url,"code");
                 Log.d(APIHelpers.LOG_TAG,"code: "+ code);
-
                 if(code != null){
                     Intent result = new Intent();
                     result.putExtra("code", code);

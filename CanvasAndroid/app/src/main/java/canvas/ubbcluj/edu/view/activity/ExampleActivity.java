@@ -44,6 +44,9 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
     TextView output;
     ExampleActivity exampleActivity;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
