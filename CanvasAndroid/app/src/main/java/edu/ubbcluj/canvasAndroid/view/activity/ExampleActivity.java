@@ -3,7 +3,6 @@ package edu.ubbcluj.canvasAndroid.view.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,19 +12,15 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.instructure.canvasapi.api.ConversationAPI;
 import com.instructure.canvasapi.api.CourseAPI;
 import com.instructure.canvasapi.api.OAuthAPI;
 import com.instructure.canvasapi.api.QuizAPI;
 import com.instructure.canvasapi.model.CanvasError;
-import com.instructure.canvasapi.model.Conversation;
+import com.instructure.canvasapi.model.CanvasModel;
 import com.instructure.canvasapi.model.Course;
-import com.instructure.canvasapi.model.Favorite;
 import com.instructure.canvasapi.model.OAuthToken;
 import com.instructure.canvasapi.model.Quiz;
 import com.instructure.canvasapi.utilities.*;
-
-import java.util.ArrayList;
 
 import edu.ubbcluj.canvasAndroid.R;
 import retrofit.RetrofitError;
@@ -41,18 +36,18 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
     private final static String REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob";
 
     public final static String SECTION_DIVIDER = " \n \n ------------------- \n \n";
+    private static Course c;    //a course used to get its quizzes
 
     /**
      * Activity member variables.
      */
-    CanvasCallback<Course[]> courseCanvasCallback;
-    CanvasCallback<Quiz[]> quizCanvasCallback;
+    CanvasCallback<Course[]> courseCanvasCallback;  //we use it to get the courses
+    CanvasCallback<Quiz[]> quizCanvasCallback;  //we use it to get the quizzes
+    CanvasCallback<CanvasModel[]> quizQuestionsCanvasCallback;  //we use it to get the details from the quizzes
     String nextURL = "";
     ScrollView scrollView;
     Button loadNextURLButton;
     TextView output;
-    ExampleActivity exampleActivity;
-    Course c;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +56,6 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
         output = (TextView)findViewById(R.id.output);
         loadNextURLButton = (Button) findViewById(R.id.loadNextPage);
         scrollView = (ScrollView) findViewById(R.id.scrollview);
-
 
         //Set up a default error delegate. This will be the same one for all API calls
         //You can override the default ErrorDelegate in any CanvasCallBack constructor.
@@ -78,7 +72,7 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
                 for (Course course : courses) {
           //          appendToTextView("[CACHED] " + course.getId() + ": " + course.getName());
                 }
-                appendToTextView(SECTION_DIVIDER);
+//                appendToTextView(SECTION_DIVIDER);
             }
 
             @Override
@@ -87,10 +81,12 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
                 nextURL = linkHeaders.nextURL;
 
                 for (Course course : courses) {
-                    appendToTextView(course.getId() + ": " + course.getName());
-                    if (course.getId() == 233) {
+              //      appendToTextView(course.getId() + ": " + course.getName());
+                    if (course.getName().equals("Quiz-Teszt")) {        //if the course is the Quiz-Test, then we save it,
+                                                                    //because we want it's quizzes
                         c = course;
-              //          appendToTextView(course.getId() + ": " + course.getName());
+                        makeAPICall2();         //gets the quizzes
+                        break;
                     }
                 }
             }
@@ -104,35 +100,57 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
 
         quizCanvasCallback = new CanvasCallback<Quiz[]>(this) {
             @Override
-            public void cache(Quiz[] courses) {
+            public void cache(Quiz[] quizzes) {
                 //Cache will ALWAYS come before firstPage.
                 //Only the firstPage of any API is ever cached.
-                for (Quiz course : courses) {
+                for (Quiz quiz : quizzes) {
 //                    appendToTextView("[CACHED] " + course.getId() + ": " + course.getTitle());
                 }
                 appendToTextView(SECTION_DIVIDER);
             }
 
             @Override
-            public void firstPage(Quiz[] courses, LinkHeaders linkHeaders, retrofit.client.Response response) {
+            public void firstPage(Quiz[] quizzes, LinkHeaders linkHeaders, retrofit.client.Response response) {
                 //Save the next url for pagination.
                 nextURL = linkHeaders.nextURL;
 
-                for (Quiz course : courses) {
-                    //for(Quiz quiz : quizzes) {
-                    appendToTextView(course.getId() + ": " + course.getTitle());
-                    // }
-                }
+                Quiz quiz = quizzes[0];     //the first quiz
+                showQuiz(quiz);
+ //               for (Quiz quiz : quizzes) {
+//                      appendToTextView(quiz.getId() + ": " + quiz.getTitle());
+ //               }
             }
 
             @Override
-            public void nextPage(Quiz[] courses, LinkHeaders linkHeaders, retrofit.client.Response response) {
+            public void nextPage(Quiz[] quizzes, LinkHeaders linkHeaders, retrofit.client.Response response) {
                 //nextPage is an optional override. The default behavior is to simply call firstPage() as we've done here;
-                firstPage(courses, linkHeaders, response);
+                firstPage(quizzes, linkHeaders, response);
             }
         };
 
-        //If they press the button, make an API call.
+        quizQuestionsCanvasCallback = new CanvasCallback<CanvasModel[]>(this) {
+            @Override
+        public void cache(CanvasModel[] questions) {
+            //Cache will ALWAYS come before firstPage.
+            //Only the firstPage of any API is ever cached.
+//            appendToTextView(SECTION_DIVIDER);
+        }
+
+        @Override
+        public void firstPage(CanvasModel[] questions, LinkHeaders linkHeaders, retrofit.client.Response response) {
+            //Save the next url for pagination.
+            nextURL = linkHeaders.nextURL;
+
+        }
+
+        @Override
+        public void nextPage(CanvasModel[] questions, LinkHeaders linkHeaders, retrofit.client.Response response) {
+            //nextPage is an optional override. The default behavior is to simply call firstPage() as we've done here;
+            firstPage(questions, linkHeaders, response);
+        }
+    };
+
+    //If they press the button, make an API call.
         loadNextURLButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -186,52 +204,55 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
      * Helper for making an API call.
      */
 
-    public void makeAPICall() {
+    public void makeAPICall() {     //get the courses
         //Don't let them spam the button.
         loadNextURLButton.setEnabled(false);
-
-
         //Check if the first api call has come back.
-
         if ("".equals(nextURL)) {
             CourseAPI.getFirstPageCourses(courseCanvasCallback);
-            Log.e("quiz", nextURL + "1");
         }
         //Check if we're at the end of the paginated list.
         if (nextURL != null) {
             CourseAPI.getNextPageCourses(courseCanvasCallback, "courses?&page=2");
-            Log.e("quiz", nextURL + "2");
         }
         //We are at the end of the list.
         else {
             Toast.makeText(getContext(), "There are no more items", Toast.LENGTH_LONG).show();
             loadNextURLButton.setEnabled(true);
-            Log.e("quiz", nextURL + "3");
         }
-/*
+    }
+
+    public void makeAPICall2() {    //get the quizzes (it will have another name)
+
+        nextURL = "";
         //Check if the first api call has come back.
         if ("".equals(nextURL)) {
-            Log.e("quiz", nextURL);
-            QuizAPI.getFirstPageQuizzes(c, quizCanvasCallback);
+            QuizAPI.getFirstPageQuizzes(c, quizCanvasCallback);     //we use the c course to get it's quizzes
         }
         //Check if we're at the end of the paginated list.
         else if (nextURL != null) {
-            Log.e("quiz", nextURL);
-
             QuizAPI.getNextPageQuizzes(nextURL, quizCanvasCallback);
         }
         //We are at the end of the list.
         else {
-            Log.e("quiz", nextURL);
-
             Toast.makeText(getContext(), "There are no more items", Toast.LENGTH_LONG).show();
             loadNextURLButton.setEnabled(true);
         }
-*/    }
+    }
 
     /**
      * Helper for appending to a text view
      */
+
+    public void showQuiz(Quiz q) {
+        appendToTextView(q.getTitle());
+        appendToTextView(q.getType());
+        appendToTextView(q.getUrl());
+    }
+
+    public void showQuizDetails(Quiz q) {
+
+    }
 
     public void appendToTextView(String text){
         if(output == null){
