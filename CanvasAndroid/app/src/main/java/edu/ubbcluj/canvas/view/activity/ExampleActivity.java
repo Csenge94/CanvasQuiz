@@ -3,9 +3,11 @@ package edu.ubbcluj.canvas.view.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,9 +34,8 @@ import retrofit.client.Response;
 
 public class ExampleActivity extends Activity implements APIStatusDelegate, ErrorDelegate {
     private static String authCode;
-    public static String token = "80406~ata5EVVC35DnusS27Bc5R891UUhLUCe5NpZKTQY4bq3YrM8uGEuPkVCR8NfdcBpv";
-
-    public final static String DOMAIN = "canvas.cs.ubbcluj.ro";
+    private static String token = "80406~ata5EVVC35DnusS27Bc5R891UUhLUCe5NpZKTQY4bq3YrM8uGEuPkVCR8NfdcBpv";
+    private final static String DOMAIN = "canvas.cs.ubbcluj.ro";
     private final static String ID = "10000000000002";
     private final static String SECRET = "ru1UrVTFK3mHtiiVHiZghZqWQXNg12oOjjNjAyTcFBmEjlxGXm6yes7Ho4iPxGfH";
     private final static String REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob";
@@ -143,9 +144,15 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(exampleAc, OAuthActivity.class);
-                intent.setData(Uri.parse("https://"+DOMAIN +"/login/oauth2/auth?client_id=" + ID + "&response_type=code&redirect_uri=" + REDIRECT_URI));
-                startActivityForResult(intent, 0);
+                if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("token", null) == null) {
+                    Intent intent = new Intent(exampleAc, OAuthActivity.class);
+                    intent.setData(Uri.parse("https://" + DOMAIN + "/login/oauth2/auth?client_id=" + ID + "&response_type=code&redirect_uri=" + REDIRECT_URI));
+                    startActivityForResult(intent, 0);
+                }
+                else {
+                    Log.d("logolunk", "getcourses");
+                    getCourses();
+                }
             }
         });
     }
@@ -172,6 +179,8 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
             @Override
             public void firstPage(OAuthToken oAuthToken, LinkHeaders linkHeaders, Response response) {
                 token = oAuthToken.getAccess_token();
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("token", token).commit();
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("domain", DOMAIN).commit();
                 setUpCanvasAPI();
                 getCourses();
             }

@@ -2,10 +2,8 @@ package edu.ubbcluj.canvas.view.activity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,8 +20,6 @@ import com.instructure.canvasapi.utilities.ErrorDelegate;
 import com.instructure.canvasapi.utilities.LinkHeaders;
 
 import java.util.ArrayList;
-
-import edu.ubbcluj.canvasAndroid.R;
 import retrofit.RetrofitError;
 
 public class QuizActivity extends AppCompatActivity implements APIStatusDelegate, ErrorDelegate{
@@ -41,8 +37,8 @@ public class QuizActivity extends AppCompatActivity implements APIStatusDelegate
         course = ExampleActivity.getCourse();
         quiz = ExampleActivity.getQuiz();
         questionCount = quiz.getQuestionCount();
-        CanvasRestAdapter.setupInstance(this, ExampleActivity.token, ExampleActivity.DOMAIN);
-        Log.d("logolunk", "oncreate");
+        CanvasRestAdapter.setupInstance(this, PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("token", null),
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("domain", null));
 
         quizQuestions = new ArrayList<>();
         quizQuestionsCanvasCallback = new CanvasCallback<QuizQuestion[]>(QuizActivity.this) {
@@ -50,11 +46,9 @@ public class QuizActivity extends AppCompatActivity implements APIStatusDelegate
             public void firstPage(QuizQuestion[] questions, LinkHeaders linkHeaders, retrofit.client.Response response) {
                 //Save the next url for pagination.
                 nextURL = linkHeaders.nextURL;
-                Log.d("Logolunk", "getQuizQuestions:" + nextURL);
                 for (QuizQuestion quizQuestion : questions) {
                     quizQuestions.add(quizQuestion);
                     questionCount--;
-                    Log.d("logolunk", quizQuestion.getQuestionType() + "");
                     if (0 == questionCount) {
                         showQuestions();
                     }
@@ -74,25 +68,16 @@ public class QuizActivity extends AppCompatActivity implements APIStatusDelegate
     public void getQuizQuestions() {    //get the quizzes (it will have another name)
         //Check if the first api call has come back.
        if ("".equals(nextURL)) {
-            Log.d("logolunk", course.getName() + " " + quiz.getTitle());
             QuizAPI.getFirstPageQuizQuestions(course, quiz.getId(), quizQuestionsCanvasCallback);     //we use the c course to get it's quizzes
 
         }
         //Check if we're at the end of the paginated list.
         else if (nextURL != null) {
-            Log.d("logolunk", "4");
-
             QuizAPI.getNextPageQuizQuestions(nextURL, quizQuestionsCanvasCallback);
-            Log.d("logolunk", "5");
-
         }
         //We are at the end of the list.
         else {
-            Log.d("logolunk", "6");
-
             Toast.makeText(getContext(), "There are no more items", Toast.LENGTH_LONG).show();
-            Log.d("logolunk", "7");
-
         }
 
     }
