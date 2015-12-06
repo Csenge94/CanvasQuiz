@@ -23,4 +23,4 @@
         android:textColor="#000"
         android:layout_toRightOf="@+id/icon" />
 </RelativeLayout>
-<!-- From: file:/C:/Users/otvos/Desktop/CsoportosGit/CanvasQuiz-ubbse2015/Canvas/app/src/main/res/layout/row_layout.xml -->
+<!-- From: file:/H:/CsoportosProjekt/Uj/CanvasQuiz-ubbse2015/Canvas/app/src/main/res/layout/row_layout.xml -->
