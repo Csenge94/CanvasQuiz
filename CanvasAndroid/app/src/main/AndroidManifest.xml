@@ -3,14 +3,12 @@
     package="edu.ubbcluj.canvasAndroid"
     android:versionCode="1"
     android:versionName="1.0" >
- 
- 
+
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -20,102 +18,113 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".view.activity.ExampleActivity"
+            android:name="edu.ubbcluj.canvas.view.activity.ExampleActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.OAuthActivity" >
+        <activity android:name="edu.ubbcluj.canvas.view.activity.OAuthActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:host="canvas.cs.ubbcluj.ro" />
                 <data android:scheme="https" />
                 <data android:path="/login/oauth2/auth" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.activity.DashBoardActivity"
+            android:name="edu.ubbcluj.canvas.view.activity.DashBoardActivity"
             android:label="@string/title_activity_dashboard"
-            android:parentActivityName=".view.activity.DashBoardActivity"
+            android:parentActivityName="edu.ubbcluj.canvas.view.activity.DashBoardActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.ubbcluj.canvasAndroid.DashBoardActivity" />
+                android:value="edu.ubbcluj.canvas.view.activity.DashBoardActivity" />
         </activity>
         <activity
-            android:name=".view.activity.BaseActivity"
+            android:name="edu.ubbcluj.canvas.view.activity.BaseActivity"
             android:label="@string/title_activity_base"
-            android:parentActivityName=".view.activity.DashBoardActivity"
+            android:parentActivityName="edu.ubbcluj.canvas.view.activity.DashBoardActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activity.CourseActivity"
+            android:name="edu.ubbcluj.canvas.view.activity.CourseActivity"
             android:label="@string/title_activity_course"
             android:noHistory="true"
-            android:parentActivityName=".view.activity.DashBoardActivity"
+            android:parentActivityName="edu.ubbcluj.canvas.view.activity.DashBoardActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.ubbcluj.canvasAndroid.DashBoardActivity" />
+                android:value="edu.ubbcluj.canvas.view.activity.DashBoardActivity" />
         </activity>
         <activity
-            android:name=".view.activity.MessagesActivity"
+            android:name="edu.ubbcluj.canvas.view.activity.MessagesActivity"
             android:label="@string/title_activity_messages"
-            android:parentActivityName=".view.activity.DashBoardActivity"
+            android:parentActivityName="edu.ubbcluj.canvas.view.activity.DashBoardActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.ubbcluj.canvasAndroid.DashBoardActivity" />
+                android:value="edu.ubbcluj.canvas.view.activity.DashBoardActivity" />
         </activity>
         <activity
-            android:name=".view.activity.MessageItemActivity"
+            android:name="edu.ubbcluj.canvas.view.activity.MessageItemActivity"
             android:label="@string/title_activity_message_item"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.ubbcluj.canvasAndroid.DashBoardActivity" />
+                android:value="edu.ubbcluj.canvas.view.activity.DashBoardActivity" />
         </activity>
         <activity
-            android:name=".view.activity.AnnouncementActivity"
+            android:name="edu.ubbcluj.canvas.view.activity.AnnouncementActivity"
             android:label="@string/title_activity_information"
             android:noHistory="true"
-            android:parentActivityName=".view.activity.DashBoardActivity"
+            android:parentActivityName="edu.ubbcluj.canvas.view.activity.DashBoardActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.ubbcluj.canvasAndroid.DashBoardActivity" />
+                android:value="edu.ubbcluj.canvas.view.activity.DashBoardActivity" />
         </activity>
         <activity
-            android:name=".view.activity.CourseSelectionActivity"
+            android:name="edu.ubbcluj.canvas.view.activity.CourseSelectionActivity"
             android:label="@string/title_activity_course_selection"
-            android:parentActivityName=".view.activity.DashBoardActivity" >
+            android:parentActivityName="edu.ubbcluj.canvas.view.activity.DashBoardActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.ubbcluj.canvasAndroid.DashBoardActivity" />
+                android:value="edu.ubbcluj.canvas.view.activity.DashBoardActivity" />
         </activity>
         <activity
-            android:name=".view.activity.AssignmentActivity"
+            android:name="edu.ubbcluj.canvas.view.activity.AssignmentActivity"
             android:label="@string/title_activity_assignment"
             android:noHistory="true"
-            android:parentActivityName=".view.activity.DashBoardActivity"
+            android:parentActivityName="edu.ubbcluj.canvas.view.activity.DashBoardActivity"
             android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.ubbcluj.canvasAndroid.DashBoardActivity" />
+                android:value="edu.ubbcluj.canvas.view.activity.DashBoardActivity" />
         </activity>
 
-        <service android:name=".view.activity.MyService" />
+        <service android:name="edu.ubbcluj.canvas.view.activity.MyService" />
 
+        <activity
+            android:name="edu.ubbcluj.canvas.view.activity.QuizActivity"
+            android:label="@string/title_activity_quiz"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

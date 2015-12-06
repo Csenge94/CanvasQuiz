@@ -1,4 +1,4 @@
-package canvas.ubbcluj.edu.canvasandroid;
+package canvas.ubbcluj.edu;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

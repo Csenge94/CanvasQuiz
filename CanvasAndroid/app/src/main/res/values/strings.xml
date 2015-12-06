@@ -48,4 +48,5 @@
     <string name="Atmenet_URL_Port">Url/Port</string>
     <string name="ok_url_port">Ok</string>
     <string name="Cancel_url_port">Cancel</string>
+    <string name="title_activity_quiz">QuizActivity</string>
 </resources>
