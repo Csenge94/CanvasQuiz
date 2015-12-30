@@ -110,7 +110,7 @@ public class RestUserController extends AsyncTask<String, Void, String> implemen
     protected void onPreExecute() {
         super.onPreExecute();
 
-        loginActivity.showDialog("Connecting... Please wait!");
+//        loginActivity.showDialog("Connecting... Please wait!");
     }
 
     /**
@@ -124,7 +124,7 @@ public class RestUserController extends AsyncTask<String, Void, String> implemen
                     Toast.LENGTH_SHORT).show();
         } else {
             if (!(result.compareTo("HTTP/1.1 200 OK") == 0)) {
-                loginActivity.closeDialog();
+//                loginActivity.closeDialog();
                 Log.d("Rest", "Login failed: " + result);
                 Toast.makeText(loginActivity, "Invalid username or password!",
                         Toast.LENGTH_SHORT).show();

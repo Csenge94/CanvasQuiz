@@ -51,7 +51,6 @@ public class RestActivityStreamController extends AsyncTask<String, Void, String
         }
     }
 
-    @Override
     public List<ActivityStream> getData() {
         return data;
     }
@@ -123,7 +122,7 @@ public class RestActivityStreamController extends AsyncTask<String, Void, String
     }
 
     /**
-     * Converts a JSON Object to an {@link edu.ubbcluj.canvasAndroid.model.ActivityStream} object.
+     * Converts a JSON Object to an {@link edu.ubbcluj.canvas.model.ActivityStream} object.
      */
     private ActivityStream convertJSONtoAS(JSONObject obj) {
         ActivityStream as = new ActivityStream();
@@ -172,7 +171,7 @@ public class RestActivityStreamController extends AsyncTask<String, Void, String
                 //conversation id
                 as.setSecondaryId(obj.getInt("conversation_id"));
 
-                String newTitle = "";
+                String newTitle;
 
                 if (nParticipants <= 6) {
                     int convID = obj.getInt("conversation_id");

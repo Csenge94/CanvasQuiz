@@ -34,7 +34,7 @@ import retrofit.client.Response;
 
 public class ExampleActivity extends Activity implements APIStatusDelegate, ErrorDelegate {
     private static String authCode;
-    private static String token = "80406~ata5EVVC35DnusS27Bc5R891UUhLUCe5NpZKTQY4bq3YrM8uGEuPkVCR8NfdcBpv";
+    private static String token = "";
     private final static String DOMAIN = "canvas.cs.ubbcluj.ro";
     private final static String ID = "10000000000002";
     private final static String SECRET = "ru1UrVTFK3mHtiiVHiZghZqWQXNg12oOjjNjAyTcFBmEjlxGXm6yes7Ho4iPxGfH";

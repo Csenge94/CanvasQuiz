@@ -38,11 +38,12 @@ public class OAuthActivity extends Activity {
                 Log.d(APIHelpers.LOG_TAG,"code: "+ code);
 
                 if(code != null){
+                    String cookies = CookieManager.getInstance().getCookie(url);
+                    Log.d("logolunk", cookies);
                     Intent result = new Intent();
                     result.putExtra("code", code);
                     setResult(RESULT_OK, result);
-                    finish(); 
-					
+                    finish();
                 }
             }
         });

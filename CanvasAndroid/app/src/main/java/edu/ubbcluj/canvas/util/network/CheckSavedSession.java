@@ -51,7 +51,7 @@ public class CheckSavedSession extends AsyncTask<LoginActivity, Void, Void> {
         if (cookieIsAvailable) {
             activity.loginCompleted();
         } else {
-            activity.setVisibility(View.VISIBLE);
+ //           activity.setVisibility(View.VISIBLE);
         }
     }
 

@@ -1,6 +1,5 @@
 package edu.ubbcluj.canvas.controller.rest;
 
-import edu.ubbcluj.canvas.controller.rest.RestActivityStreamController;
 import edu.ubbcluj.canvas.controller.ActivityStreamSummaryController;
 import edu.ubbcluj.canvas.controller.AnnouncementCommentController;
 import edu.ubbcluj.canvas.controller.AnnouncementController;
@@ -13,6 +12,8 @@ import edu.ubbcluj.canvas.controller.MessageSequenceController;
 import edu.ubbcluj.canvas.controller.NewMessageController;
 import edu.ubbcluj.canvas.controller.SubmissionCommentController;
 import edu.ubbcluj.canvas.controller.ToDoController;
+import edu.ubbcluj.canvas.controller.canvasAPI.CanvasCoursesController;
+import edu.ubbcluj.canvas.controller.canvasAPI.CanvasDashboardController;
 
 public class RestApiControllerFactory extends ControllerFactory {
 
@@ -24,6 +25,16 @@ public class RestApiControllerFactory extends ControllerFactory {
 	@Override
 	public RestActivityStreamController getDashboardController() {
 		return new RestActivityStreamController();
+	}
+
+	@Override
+	public CanvasDashboardController getDashboardController2() {
+		return new CanvasDashboardController();
+	}
+
+	@Override
+	public CoursesController getCoursesController2() {
+		return new CanvasCoursesController();
 	}
 
 	@Override

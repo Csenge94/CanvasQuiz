@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,6 @@ public class CustomArrayAdapterActivityStream extends ArrayAdapter<ActivityStrea
 	
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-
 		LayoutInflater inflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View rowView = inflater.inflate(R.layout.dashboard_row_layout, parent, false);

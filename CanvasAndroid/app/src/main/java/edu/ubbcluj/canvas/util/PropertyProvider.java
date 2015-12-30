@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 
 public class PropertyProvider {
     private static ResourceBundle bundle =
-            ResourceBundle.getBundle("edu.ubbcluj.canvasAndroid.res.config");
+            ResourceBundle.getBundle("edu.ubbcluj.canvas.res.config");
 
     public static String getProperty(String key) {
         try {

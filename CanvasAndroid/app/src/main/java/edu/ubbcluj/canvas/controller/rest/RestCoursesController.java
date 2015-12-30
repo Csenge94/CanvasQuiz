@@ -112,7 +112,7 @@ public class RestCoursesController extends AsyncTask<String, Void, String> imple
     }
 
     /**
-     * Converts a JSON Object to an {@link edu.ubbcluj.canvasAndroid.model.ActiveCourse} object.
+     * Converts a JSON Object to an {@link edu.ubbcluj.canvas.model.ActiveCourse} object.
      */
     private ActiveCourse convertJSONtoStr(JSONObject jObj) {
 
@@ -128,7 +128,6 @@ public class RestCoursesController extends AsyncTask<String, Void, String> imple
         return activeCourse;
     }
 
-    @Override
     public List<ActiveCourse> getData() {
         return data;
     }
