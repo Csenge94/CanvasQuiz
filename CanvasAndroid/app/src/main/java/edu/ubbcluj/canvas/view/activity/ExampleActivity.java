@@ -59,18 +59,24 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_example);
-        output = (TextView)findViewById(R.id.output);
+        output = (TextView) findViewById(R.id.output);
+        Log.d("DZLog", "1");
         loadNextURLButton = (Button) findViewById(R.id.loadNextPage);
+        Log.d("DZLog", "2");
         scrollView = (ScrollView) findViewById(R.id.scrollview);
+        Log.d("DZLog", "3");
         exampleActivity = this;
 
         //Set up a default error delegate. This will be the same one for all API calls
         //You can override the default ErrorDelegate in any CanvasCallBack constructor.
         //In a real application, this should probably be a standalone class.
+        Log.d("DZLog", "4");
         APIHelpers.setDefaultErrorDelegateClass(this, this.getClass().getName());
-        APIHelpers.setDomain(this,DOMAIN);
+        Log.d("DZLog", "5");
+        APIHelpers.setDomain(this, DOMAIN);
+        Log.d("DZLog", "7");
         //Set up the callback
-
+/*
         courseCanvasCallback = new CanvasCallback<Course[]>(this) {
             @Override
             public void cache(Course[] courses) {
@@ -137,9 +143,9 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
                 getCourses();
             }
         });
-
+                    */
         final ExampleActivity exampleAc = this;
-
+        /*
         Button loginButton = (Button) findViewById(R.id.login2button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,21 +161,37 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
                 }
             }
         });
+        */
+
+        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("token", null) == null) {
+            Intent intent = new Intent(exampleAc, OAuthActivity.class);
+            intent.setData(Uri.parse("https://" + DOMAIN + "/login/oauth2/auth?client_id=" + ID + "&response_type=code&redirect_uri=" + REDIRECT_URI));
+            startActivityForResult(intent, 0);
+        }
+        else {
+            Log.d("DZLog", "redirect");
+            redirect();
+        }
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        findViewById(R.id.login2button).setVisibility(View.INVISIBLE);
-        findViewById(R.id.loadNextPage).setVisibility(View.VISIBLE);
+        /*findViewById(R.id.login2button).setVisibility(View.INVISIBLE);
+        findViewById(R.id.loadNextPage).setVisibility(View.VISIBLE);*/
+        Log.d("DZLog", "Dragon Ball Z");
         authCode = (String) data.getExtras().get("code");
         try {
+            Log.d("DZLog", "I Tryed so Hard and got so faaar");
             setOAuthToken(ID, SECRET, authCode);
         }catch(Exception e){
+            Log.d("DZLog", "In the end it doesn't even mater");
             Log.e(APIHelpers.LOG_TAG,"ERROR: "+e.getMessage());
         }
     }
 
     private void setOAuthToken(String id, String devKey, String authResponseCode){
+        Log.d("DZLog", "getToken");
         OAuthAPI.getToken(id, devKey, authResponseCode, new CanvasCallback<OAuthToken>(this) {
             @Override
             public void cache(OAuthToken oAuthToken) {
@@ -178,11 +200,14 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
 
             @Override
             public void firstPage(OAuthToken oAuthToken, LinkHeaders linkHeaders, Response response) {
+                Log.d("DZLog", "First page 1");
                 token = oAuthToken.getAccess_token();
+                Log.d("DZLog", "First Page 2");
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("token", token).commit();
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("domain", DOMAIN).commit();
                 setUpCanvasAPI();
-                getCourses();
+                Log.d("DZLog", "redirect2");
+                redirect();
             }
         });
     }
@@ -190,6 +215,17 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
     /**
      * Helper for making an API call.
      */
+
+    public void redirect() {
+
+
+
+        Log.d("DZLog", "Red1");
+        Intent dashBoardIntent = new Intent(this, DashBoardActivity.class);
+        Log.d("DZLog", "Red2");
+        startActivity(dashBoardIntent);
+        Log.d("DZLog", "Red3");
+    }
 
     public void getCourses() {     //get the courses
         //Don't let them spam the button.

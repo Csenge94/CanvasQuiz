@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import edu.ubbcluj.canvasAndroid.R;
 import edu.ubbcluj.canvas.controller.ControllerFactory;
 import edu.ubbcluj.canvas.controller.CoursesController;
 import edu.ubbcluj.canvas.controller.UserController;
@@ -25,7 +25,7 @@ import edu.ubbcluj.canvas.util.listener.InformationEvent;
 import edu.ubbcluj.canvas.util.listener.InformationListener;
 import edu.ubbcluj.canvas.util.network.CheckNetwork;
 import edu.ubbcluj.canvas.util.network.CheckSavedSession;
-import edu.ubbcluj.canvasAndroid.R;
+
 public class LoginActivity extends Activity {
 
 	private ProgressDialog dialog;
@@ -91,7 +91,6 @@ public class LoginActivity extends Activity {
 	 */
 	@SuppressWarnings("unchecked")
 	public void sendMessage(View vire) {
-		//TO DO : handle login using  com.instructure.canvasapi.*;
 		if (!CheckNetwork.isNetworkOnline(this)) {
 			Toast.makeText(this, "No network connection!",
 					Toast.LENGTH_LONG).show();

@@ -49,7 +49,8 @@ public class DashBoardActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		// Set the progressbar visibility 
+		// Set the progressbar visibility
+		Log.d("DZLog", "Dash1");
 		list = (ListView) findViewById(R.id.list);
 		viewContainer = findViewById(R.id.linProg);
 		viewContainer.setVisibility(View.VISIBLE);
