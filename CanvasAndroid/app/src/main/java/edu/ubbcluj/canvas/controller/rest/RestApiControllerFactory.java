@@ -10,10 +10,12 @@ import edu.ubbcluj.canvas.controller.ControllerFactory;
 import edu.ubbcluj.canvas.controller.FolderController;
 import edu.ubbcluj.canvas.controller.MessageSequenceController;
 import edu.ubbcluj.canvas.controller.NewMessageController;
+import edu.ubbcluj.canvas.controller.QuizController;
 import edu.ubbcluj.canvas.controller.SubmissionCommentController;
 import edu.ubbcluj.canvas.controller.ToDoController;
 import edu.ubbcluj.canvas.controller.canvasAPI.CanvasCoursesController;
 import edu.ubbcluj.canvas.controller.canvasAPI.CanvasDashboardController;
+import edu.ubbcluj.canvas.controller.canvasAPI.CanvasQuizController;
 
 public class RestApiControllerFactory extends ControllerFactory {
 
@@ -92,4 +94,8 @@ public class RestApiControllerFactory extends ControllerFactory {
 
 	}
 
+	@Override
+	public QuizController getQuizController() {
+		return new CanvasQuizController();
+	}
 }

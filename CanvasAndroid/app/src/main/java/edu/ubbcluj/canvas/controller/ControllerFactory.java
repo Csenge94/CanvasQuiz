@@ -24,5 +24,5 @@ public abstract class ControllerFactory {
 	public abstract FolderController getFolderController();
 	public abstract SubmissionCommentController getSubmissionCommentController();
 	public abstract NewMessageController getNewMessageController();
-	
+	public abstract QuizController getQuizController();
 }

@@ -7,8 +7,6 @@ import java.util.Locale;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +15,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.instructure.canvasapi.model.Quiz;
+
+import edu.ubbcluj.canvas.controller.QuizController;
+import edu.ubbcluj.canvas.controller.canvasAPI.CanvasQuizController;
+import edu.ubbcluj.canvas.view.adapter.CustomArrayAdapterQuizzes;
 import edu.ubbcluj.canvasAndroid.R;
 import edu.ubbcluj.canvas.controller.AnnouncementController;
 import edu.ubbcluj.canvas.controller.AssignmentsController;
@@ -37,9 +42,7 @@ import edu.ubbcluj.canvas.model.Assignment;
 import edu.ubbcluj.canvas.model.File;
 import edu.ubbcluj.canvas.model.FileTreeElement;
 import edu.ubbcluj.canvas.model.Folder;
-import edu.ubbcluj.canvas.persistence.CookieHandler;
 import edu.ubbcluj.canvas.persistence.FolderStack;
-import edu.ubbcluj.canvas.util.PropertyProvider;
 import edu.ubbcluj.canvas.util.listener.InformationEvent;
 import edu.ubbcluj.canvas.util.listener.InformationListener;
 import edu.ubbcluj.canvas.util.network.CheckNetwork;
@@ -50,8 +53,7 @@ import edu.ubbcluj.canvas.view.adapter.CustomArrayAdapterFileTreeElements;
 import edu.ubbcluj.canvas.view.adapter.CustomArrayAdapterToDo;
 
 @SuppressWarnings("deprecation")
-public class CourseActivity extends BaseActivity implements
-		ActionBar.TabListener {
+public class CourseActivity extends BaseActivity implements ActionBar.TabListener {
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -70,6 +72,7 @@ public class CourseActivity extends BaseActivity implements
 	private static int courseID;
 	private String courseName;
 	private ActionBar actionBar;
+	private static CourseActivity courseActivity;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,14 +80,16 @@ public class CourseActivity extends BaseActivity implements
 
 		// Set up the action bar.
 		actionBar = getSupportActionBar();
+		assert actionBar != null;
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		courseActivity = this;
 
 		// get the course id
 		Bundle bundle = getIntent().getExtras();
 		courseID = bundle.getInt("id");
 		courseName = bundle.getString("name");
 
-		// Create the adapter that will return a fragment for each of the three
+		// Create the adapter that will return a fragment for each of the five
 		// primary sections of the activity.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(
 				getSupportFragmentManager());
@@ -110,19 +115,15 @@ public class CourseActivity extends BaseActivity implements
 			// the adapter. Also specify this Activity object, which implements
 			// the TabListener interface, as the callback (listener) for when
 			// this tab is selected.
-			View tabView = this.getLayoutInflater().inflate(
-					R.layout.actionbar_tab, null);
+			View tabView = this.getLayoutInflater().inflate(R.layout.actionbar_tab, null);
 			TextView tabText = (TextView) tabView.findViewById(R.id.tabText);
 			tabText.setText(mSectionsPagerAdapter.getPageTitle(i));
-
-			actionBar.addTab(actionBar.newTab().setCustomView(tabView)
-					.setTabListener(this));
+			actionBar.addTab(actionBar.newTab().setCustomView(tabView).setTabListener(this));
 		}
 	}
 
 	@Override
 	public void restoreActionBar() {
-		// TODO Auto-generated method stub
 		super.restoreActionBar();
 		actionBar.setTitle(courseName);
 	}
@@ -132,59 +133,10 @@ public class CourseActivity extends BaseActivity implements
 			FragmentTransaction fragmentTransaction) {
 		// When the given tab is selected, switch to the corresponding page in
 		// the ViewPager.
-		int actualSection = tab.getPosition() + 1;
-		
-		switch (actualSection) {
-		case 1: {
-			if(!CookieHandler.checkData(getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE), 
-					PropertyProvider
-					.getProperty("url")
-					+ "/api/v1/courses/"
-					+ courseID
-					+ "/todo") && !CheckNetwork.isNetworkOnline(this)) {
-				Toast.makeText(this, "No network connection!",
-						Toast.LENGTH_LONG).show();
-			}
-			break;
+
+		if (!CheckNetwork.isNetworkOnline(this)) {
+			Toast.makeText(this, "No network connection!", Toast.LENGTH_LONG).show();
 		}
-		case 2: {
-			if(!CookieHandler.checkData(this.getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE), 
-					PropertyProvider
-					.getProperty("url")
-					+ "/api/v1/courses/"
-					+ courseID
-					+ "/assignments") && !CheckNetwork.isNetworkOnline(this)) {
-				Toast.makeText(this, "No network connection!",
-						Toast.LENGTH_LONG).show();
-			}
-			break;
-		}
-		case 3: {
-			if(!CookieHandler.checkData(this.getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE), 
-					PropertyProvider
-					.getProperty("url")
-					+ "/api/v1/courses/"
-					+ courseID
-					+ "/activity_stream") && !CheckNetwork.isNetworkOnline(this)) {
-				Toast.makeText(this, "No network connection!",
-						Toast.LENGTH_LONG).show();
-			}
-			break;
-		}
-		case 4: {
-			if(!CookieHandler.checkData(this.getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE), 
-					PropertyProvider
-					.getProperty("url")
-					+ "/api/v1/courses/"
-					+ courseID
-					+ "/folders/by_path") && !CheckNetwork.isNetworkOnline(this)) {
-				Toast.makeText(this, "No network connection!",
-						Toast.LENGTH_LONG).show();
-			}
-			break;
-		}
-		}
-		
 		mViewPager.setCurrentItem(tab.getPosition());
 	}
 
@@ -218,8 +170,8 @@ public class CourseActivity extends BaseActivity implements
 
 		@Override
 		public int getCount() {
-			// Show 3 total pages.
-			return 4;
+			// Show 5 total pages.
+			return 5;
 		}
 
 		@Override
@@ -234,6 +186,8 @@ public class CourseActivity extends BaseActivity implements
 				return getString(R.string.tab_announcements).toUpperCase(l);
 			case 3:
 				return getString(R.string.tab_files).toUpperCase(l);
+			case 4:
+				return getString(R.string.tab_quizzes).toUpperCase(l);
 			}
 			return null;
 		}
@@ -256,30 +210,18 @@ public class CourseActivity extends BaseActivity implements
 		private List<Assignment> assignments;
 		private List<Announcement> announcements;
 		private List<FileTreeElement> fileTreeElements;
+		private List<Quiz> quizzes;
 
 		private CustomArrayAdapterAssignments assignmentsAdapter;
 		private CustomArrayAdapterToDo toDoAdapter;
 		private CustomArrayAdapterAnnouncements announcementAdapter;
 		private CustomArrayAdapterFileTreeElements fileTreeElementsAdapter;
+		private CustomArrayAdapterQuizzes quizzesAdapter;
 
 		final FolderStack folderStack = new FolderStack();
-		
-		private AsyncTask<String, Void, String> asyncTaskAssignment;
-		private AsyncTask<String, Void, String> asyncTaskForRefreshAssignment;
-		
-		private AsyncTask<String, Void, String> asyncTaskAnnouncement;
-		private AsyncTask<String, Void, String> asyncTaskForRefreshAnnouncement;
-		
-		private AsyncTask<String, Void, String> asyncTaskFolder;
-		private AsyncTask<String, Void, String> asyncTaskForRefreshFolder;
-		
-		private AsyncTask<String, Void, String> asyncTaskComingUp;
-		private AsyncTask<String, Void, String> asyncTaskForRefreshComingUp;
-
 		private SwipeRefreshLayout swipeView;
-		
 		private RestDownloadManager downloadManager;
-		
+
 		/**
 		 * Returns a new instance of this fragment for the given section number.
 		 */
@@ -296,7 +238,6 @@ public class CourseActivity extends BaseActivity implements
 			cf = ControllerFactory.getInstance();
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
@@ -305,60 +246,45 @@ public class CourseActivity extends BaseActivity implements
 
 			View rootView;
 
-			final SharedPreferences sp = this
-					.getActivity()
-					.getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE);
+			final SharedPreferences sp = this.getActivity().getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE);
 
 			switch (sectionNumber) {
+			//to do
 			case 1: {
 				ToDoController todoController;
-
 				rootView = inflater.inflate(R.layout.fragment_assignment, null);
 
 				// Set the progressbar visibility
 				list = (ListView) rootView.findViewById(R.id.list);
 				viewContainer = rootView.findViewById(R.id.linProg);
 				viewContainer.setVisibility(View.VISIBLE);
-
 				list.setOnItemClickListener(new OnItemClickListener() {
 
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
 						Assignment assignment = assignments.get(position);
-						
-						if (asyncTaskComingUp != null)
-							asyncTaskComingUp.cancel(true);
+
 						if (swipeView != null)
 							swipeView.setRefreshing(false);
-						
-						if(!CookieHandler.checkData(getActivity().getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE), 
-								PropertyProvider.getProperty("url")
-									+ "/api/v1/courses/"
-									+ assignment.getCourseId()
-									+ "/assignments/"
-									+ assignment.getId()) && !CheckNetwork.isNetworkOnline(getActivity())) {
-							Toast.makeText(getActivity(), "No network connection!",
-									Toast.LENGTH_LONG).show();
+
+						if(!CheckNetwork.isNetworkOnline(getActivity())) {
+							Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
 						} else {
-							Intent assignmentIntent = new Intent(
-									getActivity(), AssignmentActivity.class);
-	
+							Intent assignmentIntent = new Intent(getActivity(), AssignmentActivity.class);
+
 							Bundle bundle = new Bundle();
 							bundle.putInt("course_id", assignment.getCourseId());
 							bundle.putInt("assignment_id", assignment.getId());
-	
 							assignmentIntent.putExtras(bundle);
-	
 							startActivity(assignmentIntent);
 						}
 					}
 				});
 
-				assignments = new ArrayList<Assignment>();
+				assignments = new ArrayList<>();
 				todoController = cf.getToDoController();
 				todoController.setSharedPreferences(sp);
-
 				todoController.addInformationListener(new InformationListener() {
 
 					@Override
@@ -367,72 +293,52 @@ public class CourseActivity extends BaseActivity implements
 
 						setProgressGone();
 						setAssignments(ad.getData());
-						toDoAdapter = new CustomArrayAdapterToDo(getActivity(),
-								assignments);
+						toDoAdapter = new CustomArrayAdapterToDo(getActivity(), assignments);
 						list.setAdapter(toDoAdapter);
 					}
 				});
 
-				if(!CookieHandler.checkData(getActivity().getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE), 
-						PropertyProvider
-						.getProperty("url")
-						+ "/api/v1/courses/"
-						+ courseID
-						+ "/todo") && !CheckNetwork.isNetworkOnline(getActivity())) {
+				if(!CheckNetwork.isNetworkOnline(getActivity())) {
 					setProgressGone();
 				} else {
-					asyncTaskComingUp = ((AsyncTask<String, Void, String>) todoController);
-					asyncTaskComingUp.execute(new String[] { PropertyProvider
-							.getProperty("url")
-							+ "/api/v1/courses/"
-							+ courseID
-							+ "/todo" });
+					Log.d("logolunk", courseID + " idju kurzus todoja");
+					//canvasToDoController.makeApiCall(courseID);
 				}
 
-				swipeView = (SwipeRefreshLayout) rootView
-						.findViewById(R.id.swipe);
+				swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe);
+				swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+						@Override
+						public void onRefresh() {
+							if(!CheckNetwork.isNetworkOnline(getActivity())) {
+								swipeView.setRefreshing(false);
+								Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
+							} else {
+								ToDoController todoController;
+								todoController = cf.getToDoController();
+								todoController.setSharedPreferences(sp);
+								RestInformation.clearData();
 
-				swipeView
-						.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-							@Override
-							public void onRefresh() {
-				        		if(!CheckNetwork.isNetworkOnline(getActivity())) {
-				        			swipeView.setRefreshing(false);
-									Toast.makeText(getActivity(), "No network connection!",
-											Toast.LENGTH_LONG).show();
-				        		} else {
-									ToDoController todoController;
-									todoController = cf.getToDoController();
-									todoController.setSharedPreferences(sp);
-									RestInformation.clearData();
-	
-									todoController.addInformationListener(new InformationListener() {
-	
-										@Override
-										public void onComplete(InformationEvent e) {
-											ToDoController ad = (ToDoController) e.getSource();
-	
-											setProgressGone();
-											setAssignments(ad.getData());
-											toDoAdapter = new CustomArrayAdapterToDo(
-													getActivity(), assignments);
-											list.setAdapter(toDoAdapter);
-											swipeView.setRefreshing(false);
-										}
-									});
-	
-									asyncTaskForRefreshComingUp = ((AsyncTask<String, Void, String>) todoController);
-									asyncTaskForRefreshComingUp.execute(new String[] { PropertyProvider
-											.getProperty("url")
-											+ "/api/v1/courses/"
-											+ courseID
-											+ "/todo" });
-				        		}
+								todoController.addInformationListener(new InformationListener() {
+
+									@Override
+									public void onComplete(InformationEvent e) {
+										ToDoController ad = (ToDoController) e.getSource();
+
+										setProgressGone();
+										setAssignments(ad.getData());
+										toDoAdapter = new CustomArrayAdapterToDo(getActivity(), assignments);
+										list.setAdapter(toDoAdapter);
+										swipeView.setRefreshing(false);
+									}
+								});
+								Log.d("logolunk", courseID + " idju kurzus todoja");
+								//canvasToDoController.makeApiCall(courseID);
 							}
-						});
-
+						}
+					});
 				break;
 			}
+			//assignment
 			case 2: {
 				rootView = inflater.inflate(R.layout.fragment_assignment, null);
 
@@ -450,22 +356,15 @@ public class CourseActivity extends BaseActivity implements
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
-						Assignment assignment = assignments.get(position);
+					Assignment assignment = assignments.get(position);
 
-						if (asyncTaskAssignment != null)
-							asyncTaskAssignment.cancel(true);
-						if (swipeView != null)
-							swipeView.setRefreshing(false);
-						
-						if(!CookieHandler.checkData(getActivity().getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE), 
-								PropertyProvider.getProperty("url")
-									+ "/api/v1/courses/"
-									+ assignment.getCourseId()
-									+ "/assignments/"
-									+ assignment.getId()) && !CheckNetwork.isNetworkOnline(getActivity())) {
-							Toast.makeText(getActivity(), "No network connection!",
-									Toast.LENGTH_LONG).show();
-						} else {
+					if (swipeView != null)
+						swipeView.setRefreshing(false);
+
+					if(!CheckNetwork.isNetworkOnline(getActivity())) {
+						Toast.makeText(getActivity(), "No network connection!",
+								Toast.LENGTH_LONG).show();
+					} else {
 						Intent assignmentIntent = new Intent(getActivity(),
 								AssignmentActivity.class);
 
@@ -476,11 +375,11 @@ public class CourseActivity extends BaseActivity implements
 						assignmentIntent.putExtras(bundle);
 
 						startActivity(assignmentIntent);
-						}
+					}
 					}
 				});
 
-				assignments = new ArrayList<Assignment>();
+				assignments = new ArrayList<>();
 
 				// assignmentsController.setPlaceholderFragment(this);
 				assignmentsController
@@ -499,70 +398,51 @@ public class CourseActivity extends BaseActivity implements
 							}
 						});
 
-				if(!CookieHandler.checkData(getActivity().getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE), 
-						PropertyProvider
-						.getProperty("url")
-						+ "/api/v1/courses/"
-						+ courseID
-						+ "/assignments") && !CheckNetwork.isNetworkOnline(getActivity())) {
+				if (!CheckNetwork.isNetworkOnline(getActivity())) {
 						setProgressGone();
 				} else {
-					asyncTaskAssignment = ((AsyncTask<String, Void, String>) assignmentsController);
-					asyncTaskAssignment.execute(new String[] { PropertyProvider
-							.getProperty("url")
-							+ "/api/v1/courses/"
-							+ courseID
-							+ "/assignments" });
+					Log.d("logolunk", courseID + " idju kurzus assignment");
+					//canvasAssignmentController.makeApiCall(courseID);
 				}
 
 				final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView
 						.findViewById(R.id.swipe);
 
-				swipeView
-						.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-							@Override
-							public void onRefresh() {
-				        		if(!CheckNetwork.isNetworkOnline(getActivity())) {
-				        			swipeView.setRefreshing(false);
-									Toast.makeText(getActivity(), "No network connection!",
-											Toast.LENGTH_LONG).show();
-				        		} else {
-									AssignmentsController assignmentsController;
-									assignmentsController = cf.getAssignmentsController();
-									assignmentsController.setSharedPreferences(sp);
-									RestInformation.clearData();
-	
-									// assignmentsController.setPlaceholderFragment(this);
-									assignmentsController
-											.addInformationListener(new InformationListener() {
-	
-												@Override
-												public void onComplete(
-														InformationEvent e) {
-													AssignmentsController ad = (AssignmentsController) e
-															.getSource();
-	
-													setProgressGone();
-													setAssignments(ad.getData());
-													assignmentsAdapter = new CustomArrayAdapterAssignments(
-															getActivity(),
-															assignments);
-													list.setAdapter(assignmentsAdapter);
-													swipeView.setRefreshing(false);
-												}
-											});
-	
-									asyncTaskForRefreshAssignment = ((AsyncTask<String, Void, String>) assignmentsController);
-									asyncTaskForRefreshAssignment.execute(new String[] { PropertyProvider
-											.getProperty("url")
-											+ "/api/v1/courses/"
-											+ courseID
-											+ "/assignments" });
-				        		}
-							}
-						});
+				swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+					@Override
+					public void onRefresh() {
+						if (!CheckNetwork.isNetworkOnline(getActivity())) {
+							swipeView.setRefreshing(false);
+							Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
+						} else {
+							AssignmentsController assignmentsController;
+							assignmentsController = cf.getAssignmentsController();
+							assignmentsController.setSharedPreferences(sp);
+							RestInformation.clearData();
+
+							// assignmentsController.setPlaceholderFragment(this);
+							assignmentsController.addInformationListener(new InformationListener() {
+
+								@Override
+								public void onComplete(
+										InformationEvent e) {
+									AssignmentsController ad = (AssignmentsController) e.getSource();
+
+									setProgressGone();
+									setAssignments(ad.getData());
+									assignmentsAdapter = new CustomArrayAdapterAssignments(getActivity(), assignments);
+									list.setAdapter(assignmentsAdapter);
+									swipeView.setRefreshing(false);
+								}
+							});
+							Log.d("logolunk", courseID + " idju kurzus assignment");
+							//canvasAssignmentController.makeApiCall(courseID);
+						}
+					}
+				});
 				break;
 			}
+			//activity stream
 			case 3: {
 				rootView = inflater.inflate(R.layout.fragment_assignment, null);
 
@@ -577,36 +457,25 @@ public class CourseActivity extends BaseActivity implements
 					public void onItemClick(AdapterView<?> parent, View view,
 							int position, long id) {
 						Announcement announcement = announcements.get(position);
-						
-						if (asyncTaskAssignment != null)
-							asyncTaskAssignment.cancel(true);
+
 						if (swipeView != null)
 							swipeView.setRefreshing(false);
-						
-						if(!CookieHandler.checkData(getActivity().getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE), 
-								PropertyProvider.getProperty("url")
-									+ "/api/v1/courses/"
-									+ announcement.getCourseId()
-									+ "/discussion_topics/"
-									+ announcement.getAnnouncementId()) && !CheckNetwork.isNetworkOnline(getActivity())) {
-							Toast.makeText(getActivity(), "No network connection!",
-									Toast.LENGTH_LONG).show();
+
+						if(!CheckNetwork.isNetworkOnline(getActivity())) {
+							Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
 						} else {
 							announcement.setRead_state(true);
 							announcements.set(position,announcement);
 							announcementAdapter = new CustomArrayAdapterAnnouncements(
 									getActivity(), announcements);
 							list.setAdapter(announcementAdapter);
-							Intent announcementIntent = new Intent(getActivity(),
-									AnnouncementActivity.class);
-	
+							Intent announcementIntent = new Intent(getActivity(), AnnouncementActivity.class);
+
 							Bundle bundle = new Bundle();
 							bundle.putInt("course_id", announcement.getCourseId());
-							bundle.putInt("announcement_id",
-									announcement.getAnnouncementId());
-	
+							bundle.putInt("announcement_id", announcement.getAnnouncementId());
+
 							announcementIntent.putExtras(bundle);
-	
 							startActivity(announcementIntent);
 						}
 					}
@@ -616,91 +485,68 @@ public class CourseActivity extends BaseActivity implements
 				announcementController = cf.getAnnouncementController();
 				announcementController.setSharedPreferences(sp);
 
-				announcementController
-						.addInformationListener(new InformationListener() {
+				announcementController.addInformationListener(new InformationListener() {
 
-							@Override
-							public void onComplete(InformationEvent e) {
-								AnnouncementController ad = (AnnouncementController) e
-										.getSource();
+					@Override
+					public void onComplete(InformationEvent e) {
+						AnnouncementController ad = (AnnouncementController) e.getSource();
 
-								setProgressGone();
-								setAnnouncement(ad.getData());
-								announcementAdapter = new CustomArrayAdapterAnnouncements(
-										getActivity(), announcements);
-								list.setAdapter(announcementAdapter);
-							}
-						});
+						setProgressGone();
+						setAnnouncement(ad.getData());
+						announcementAdapter = new CustomArrayAdapterAnnouncements(getActivity(), announcements);
+						list.setAdapter(announcementAdapter);
+					}
+				});
 
-				if(!CookieHandler.checkData(getActivity().getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE), 
-						PropertyProvider
-						.getProperty("url")
-						+ "/api/v1/courses/"
-						+ courseID
-						+ "/activity_stream") && !CheckNetwork.isNetworkOnline(getActivity())) {
+				if(!CheckNetwork.isNetworkOnline(getActivity())) {
 					setProgressGone();
 				} else {
-					asyncTaskAnnouncement = ((AsyncTask<String, Void, String>) announcementController);
-					asyncTaskAnnouncement.execute(new String[] { PropertyProvider
-							.getProperty("url")
-							+ "/api/v1/courses/"
-							+ courseID
-							+ "/activity_stream" });
+					Log.d("logolunk", courseID + " idju kurzus activity stream");
+					//canvasActivityStreamController.makeApiCall(courseID);
 				}
 
-				final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView
-						.findViewById(R.id.swipe);
+				final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe);
 
-				swipeView
-						.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-							@Override
-							public void onRefresh() {
-				        		if(!CheckNetwork.isNetworkOnline(getActivity())) {
-				        			swipeView.setRefreshing(false);
-									Toast.makeText(getActivity(), "No network connection!",
-											Toast.LENGTH_LONG).show();
-				        		} else {
-									AnnouncementController announcementController;
-									announcementController = cf.getAnnouncementController();
-									announcementController.setSharedPreferences(sp);
-									RestInformation.clearData();
-	
-									announcementController
-											.addInformationListener(new InformationListener() {
-	
-												@Override
-												public void onComplete(
-														InformationEvent e) {
-													AnnouncementController ad = (AnnouncementController) e
-															.getSource();
-	
-													setProgressGone();
-													setAnnouncement(ad.getData());
-													announcementAdapter = new CustomArrayAdapterAnnouncements(
-															getActivity(),
-															announcements);
-													list.setAdapter(announcementAdapter);
-													swipeView.setRefreshing(false);
-												}
-											});
-	
-									asyncTaskForRefreshAnnouncement = ((AsyncTask<String, Void, String>) announcementController);
-									asyncTaskForRefreshAnnouncement.execute(new String[] { PropertyProvider
-											.getProperty("url")
-											+ "/api/v1/courses/"
-											+ courseID
-											+ "/activity_stream" });
-				        		}
-							}
-						});
+				swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+					@Override
+					public void onRefresh() {
+						if(!CheckNetwork.isNetworkOnline(getActivity())) {
+							swipeView.setRefreshing(false);
+							Toast.makeText(getActivity(), "No network connection!",
+									Toast.LENGTH_LONG).show();
+						} else {
+							AnnouncementController announcementController;
+							announcementController = cf.getAnnouncementController();
+							announcementController.setSharedPreferences(sp);
+							RestInformation.clearData();
 
+							announcementController.addInformationListener(new InformationListener() {
+
+								@Override
+								public void onComplete(InformationEvent e) {
+									AnnouncementController ad = (AnnouncementController) e.getSource();
+
+									setProgressGone();
+									setAnnouncement(ad.getData());
+									announcementAdapter = new CustomArrayAdapterAnnouncements(
+											getActivity(),
+											announcements);
+									list.setAdapter(announcementAdapter);
+									swipeView.setRefreshing(false);
+								}
+							});
+							Log.d("logolunk", courseID + " idju kurzus activity stream");
+							//canvasActivityStreamController.makeApiCall(courseID);
+						}
+					}
+				});
 				break;
 			}
+			//folder?
 			case 4: {
 				rootView = inflater.inflate(R.layout.fragment_assignment, null);
 
-				final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView
-						.findViewById(R.id.swipe);
+				final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe);
 
 				// Set the progressbar visibility
 				list = (ListView) rootView.findViewById(R.id.list);
@@ -711,43 +557,39 @@ public class CourseActivity extends BaseActivity implements
 
 					@Override
 					public void onComplete(InformationEvent e) {
-						FolderController fd = (FolderController) e.getSource();
+					FolderController fd = (FolderController) e.getSource();
 
-						setProgressGone();
-						setFileTreeElements(fd.getData());
-						fileTreeElementsAdapter = new CustomArrayAdapterFileTreeElements(
-								getActivity(), fileTreeElements);
-						list.setAdapter(fileTreeElementsAdapter);
-						swipeView.setRefreshing(false);
+					setProgressGone();
+					setFileTreeElements(fd.getData());
+					fileTreeElementsAdapter = new CustomArrayAdapterFileTreeElements(
+							getActivity(), fileTreeElements);
+					list.setAdapter(fileTreeElementsAdapter);
+					swipeView.setRefreshing(false);
 					}
 				};
-				
-				swipeView
-						.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-							@Override
-							public void onRefresh() {
-				        		if(!CheckNetwork.isNetworkOnline(getActivity())) {
-				        			swipeView.setRefreshing(false);
-									Toast.makeText(getActivity(), "No network connection!",
-											Toast.LENGTH_LONG).show();
-				        		} else {
-									FolderController folderController;
-									folderController = cf.getFolderController();
-									folderController.setSharedPreferences(sp);
-									RestInformation.clearData();
-	
-									folderController
-											.addInformationListener(folderInformationListener);
-	
-									Folder currentFolder = folderStack.getHead();
-	
-									asyncTaskForRefreshFolder = ((AsyncTask<String, Void, String>) folderController);
-									asyncTaskForRefreshFolder.execute(new String[] {
-											currentFolder.getFoldersUrl(),
-											currentFolder.getFilesUrl() });
-				        		}
-							}
-						});
+
+				swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+					@Override
+					public void onRefresh() {
+						if (!CheckNetwork.isNetworkOnline(getActivity())) {
+							swipeView.setRefreshing(false);
+							Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
+						} else {
+							FolderController folderController;
+							folderController = cf.getFolderController();
+							folderController.setSharedPreferences(sp);
+							RestInformation.clearData();
+
+							folderController
+									.addInformationListener(folderInformationListener);
+
+							//Folder currentFolder = folderStack.getHead();
+
+							Log.d("logolunk", courseID + " idju kurzus folder");
+							//canvasActivityFolderController.makeApiCall(courseID);
+						}
+					}
+				});
 
 				list.setOnItemClickListener(new OnItemClickListener() {
 
@@ -761,53 +603,39 @@ public class CourseActivity extends BaseActivity implements
 						if (fileTreeElement != null) {
 							if (fileTreeElement instanceof File) {
 								File file = (File) fileTreeElement;
-								
+
 								if (!CheckNetwork.isNetworkOnline(getActivity())) {
-									
-									Toast.makeText(getActivity(), "No network connection!",
-											Toast.LENGTH_SHORT).show();
-									
+									Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_SHORT).show();
 								} else {
 									downloadManager = new RestDownloadManager(getActivity());
 									downloadManager.registerActionDownloadCompleteReceiver();
 									downloadManager.registerActionNotificationClickedReceiver();
 									downloadManager.downloadFile(file);
-									
-									Toast.makeText(getActivity(), file.getName() + " downloading...",
-											Toast.LENGTH_LONG).show();
+
+									Toast.makeText(getActivity(), file.getName() + " downloading...", Toast.LENGTH_LONG).show();
 								}
-								
+
 							} else {
 								Folder folder = (Folder) fileTreeElement;
 
-								if((!CookieHandler.checkData(getActivity().getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE), 
-										folder.getFoldersUrl()) || 
-									!CookieHandler.checkData(getActivity().getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE), 
-										folder.getFilesUrl())) && 
-									!CheckNetwork.isNetworkOnline(getActivity())) {
-										Toast.makeText(getActivity(), "No network connection!",
-											Toast.LENGTH_LONG).show();
+								if(!CheckNetwork.isNetworkOnline(getActivity())) {
+										Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
 								} else {
-									if (folder != null) {
-										swipeView.setRefreshing(true);
-	
-										if (position == 0) {
-											folderStack.removeHead();
-										} else
-											folderStack.push(folder);
-	
-										FolderController folderController;
-										folderController = cf.getFolderController();
-										folderController.setSharedPreferences(sp);
-	
-										folderController
-												.addInformationListener(folderInformationListener);
-	
-										asyncTaskFolder = ((AsyncTask<String, Void, String>) folderController);
-										asyncTaskFolder.execute(new String[] {
-												folder.getFoldersUrl(),
-												folder.getFilesUrl() });
-									}
+									swipeView.setRefreshing(true);
+
+									if (position == 0) {
+										folderStack.removeHead();
+									} else
+										folderStack.push(folder);
+
+									FolderController folderController;
+									folderController = cf.getFolderController();
+									folderController.setSharedPreferences(sp);
+
+									folderController.addInformationListener(folderInformationListener);
+
+									Log.d("logolunk", courseID + " idju kurzus folder");
+									//canvasActivityFolderController.makeApiCall(courseID);
 								}
 							}
 						}
@@ -831,37 +659,112 @@ public class CourseActivity extends BaseActivity implements
 
 						FolderController folderControllerforRootElements = cf.getFolderController();
 						folderControllerforRootElements.setSharedPreferences(sp);
-						folderControllerforRootElements
-								.addInformationListener(folderInformationListener);
+						folderControllerforRootElements.addInformationListener(folderInformationListener);
 
-						asyncTaskFolder = ((AsyncTask<String, Void, String>) folderControllerforRootElements);
-						asyncTaskFolder.execute(new String[] {
-								rootfolder.getFoldersUrl(),
-								rootfolder.getFilesUrl() });
+						Log.d("logolunk", courseID + " idju kurzus folder");
+						//canvasActivityFolderController.makeApiCall(courseID);
 					}
 				});
 
-				
-				if(!CookieHandler.checkData(getActivity().getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE), 
-						PropertyProvider
-						.getProperty("url")
-						+ "/api/v1/courses/"
-						+ courseID
-						+ "/folders/by_path") && !CheckNetwork.isNetworkOnline(getActivity())) {
+				if(!CheckNetwork.isNetworkOnline(getActivity())) {
 					setProgressGone();
 				} else {
-					asyncTaskFolder = ((AsyncTask<String, Void, String>) folderController);
-					asyncTaskFolder.execute(new String[] { PropertyProvider
-							.getProperty("url")
-							+ "/api/v1/courses/"
-							+ courseID
-							+ "/folders/by_path" });
+					Log.d("logolunk", courseID + " idju kurzus folder");
+					//canvasActivityFolderController.makeApiCall(courseID);
 				}
 
 				break;
 			}
+			case 5: {
+				QuizController quizController;
+				rootView = inflater.inflate(R.layout.fragment_assignment, null);
+
+				// Set the progressbar visibility
+				list = (ListView) rootView.findViewById(R.id.list);
+				viewContainer = rootView.findViewById(R.id.linProg);
+				viewContainer.setVisibility(View.VISIBLE);
+				list.setOnItemClickListener(new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> parent, View view,
+											int position, long id) {
+						Quiz quiz = quizzes.get(position);
+
+						if (swipeView != null)
+							swipeView.setRefreshing(false);
+
+						if (!CheckNetwork.isNetworkOnline(getActivity())) {
+							Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
+						} else {
+							Intent quizIntent = new Intent(getActivity(), QuizActivity.class);
+
+							Bundle bundle = new Bundle();
+							bundle.putInt("course_id", (int) quiz.getId());
+							bundle.putInt("assignment_id", (int) quiz.getId());
+							quizIntent.putExtras(bundle);
+							startActivity(quizIntent);
+						}
+					}
+				});
+
+				quizzes = new ArrayList<>();
+				quizController = cf.getQuizController();
+				((CanvasQuizController)quizController).setContext(courseActivity);
+				quizController.setSharedPreferences(sp);
+				quizController.addInformationListener(new InformationListener() {
+
+					@Override
+					public void onComplete(InformationEvent e) {
+						QuizController ad = (QuizController) e.getSource();
+						setProgressGone();
+						setQuizzes(ad.getData());
+						quizzesAdapter = new CustomArrayAdapterQuizzes(getActivity(), quizzes);
+						list.setAdapter(quizzesAdapter);
+					}
+				});
+
+				if(!CheckNetwork.isNetworkOnline(getActivity())) {
+					setProgressGone();
+				} else {
+					Log.d("logolunk", courseID + " idju kurzus quiz");
+					((CanvasQuizController)quizController).makeAPICall(courseID);
+				}
+
+				swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe);
+				swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+					@Override
+					public void onRefresh() {
+						if(!CheckNetwork.isNetworkOnline(getActivity())) {
+							swipeView.setRefreshing(false);
+							Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
+						} else {
+							QuizController quizController;
+							quizController = cf.getQuizController();
+							((CanvasQuizController)quizController).setContext(courseActivity);
+							quizController.setSharedPreferences(sp);
+							RestInformation.clearData();
+
+							quizController.addInformationListener(new InformationListener() {
+
+								@Override
+								public void onComplete(InformationEvent e) {
+									QuizController ad = (QuizController) e.getSource();
+									setProgressGone();
+									setQuizzes(ad.getData());
+									quizzesAdapter = new CustomArrayAdapterQuizzes(getActivity(), quizzes);
+									list.setAdapter(quizzesAdapter);
+									swipeView.setRefreshing(false);
+								}
+							});
+							Log.d("logolunk", courseID + " idju kurzus quiz");
+							((CanvasQuizController)quizController).makeAPICall(courseID);
+						}
+					}
+				});
+				break;
+			}
 			default:
-				rootView = inflater.inflate(R.layout.fragment_course, null);
+			rootView = inflater.inflate(R.layout.fragment_course, null);
 			}
 
 			return rootView;
@@ -869,47 +772,19 @@ public class CourseActivity extends BaseActivity implements
 
 		@Override
 		public void onStop() {
-			if (asyncTaskComingUp != null && asyncTaskComingUp.getStatus() == Status.RUNNING) {
-				asyncTaskComingUp.cancel(true);
-			}
-			if (asyncTaskForRefreshComingUp != null
-					&& asyncTaskForRefreshComingUp.getStatus() == Status.RUNNING) {
-				asyncTaskForRefreshComingUp.cancel(true);
-			}
-			
-			if (asyncTaskAnnouncement != null && asyncTaskAnnouncement.getStatus() == Status.RUNNING) {
-				asyncTaskAnnouncement.cancel(true);
-			}
-			if (asyncTaskForRefreshAnnouncement != null
-					&& asyncTaskForRefreshAnnouncement.getStatus() == Status.RUNNING) {
-				asyncTaskForRefreshAnnouncement.cancel(true);
-			}
-			
-			if (asyncTaskAssignment != null && asyncTaskAssignment.getStatus() == Status.RUNNING) {
-				asyncTaskAssignment.cancel(true);
-			}
-			if (asyncTaskForRefreshAssignment != null
-					&& asyncTaskForRefreshAssignment.getStatus() == Status.RUNNING) {
-				asyncTaskForRefreshAssignment.cancel(true);
-			}
-			
-			if (asyncTaskFolder != null && asyncTaskFolder.getStatus() == Status.RUNNING) {
-				asyncTaskFolder.cancel(true);
-			}
-			if (asyncTaskForRefreshFolder != null
-					&& asyncTaskForRefreshFolder.getStatus() == Status.RUNNING) {
-				asyncTaskForRefreshFolder.cancel(true);
-			}
-			
 			if (downloadManager != null)
 				downloadManager.unRegisterReceiver();
-
 			super.onStop();
 		}
 
 		public void setAssignments(List<Assignment> assignment) {
 			this.assignments = assignment;
 		}
+
+		public void setQuizzes(List<Quiz> quizzes) {
+			this.quizzes = quizzes;
+		}
+
 
 		public void setAnnouncement(List<Announcement> announcement) {
 			this.announcements = announcement;

@@ -3,10 +3,8 @@ package edu.ubbcluj.canvas.view.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -19,14 +17,10 @@ import com.instructure.canvasapi.api.CourseAPI;
 import com.instructure.canvasapi.api.OAuthAPI;
 import com.instructure.canvasapi.api.QuizAPI;
 import com.instructure.canvasapi.model.CanvasError;
-import com.instructure.canvasapi.model.QuizAnswer;
-import com.instructure.canvasapi.model.QuizQuestion;
 import com.instructure.canvasapi.model.Course;
 import com.instructure.canvasapi.model.OAuthToken;
 import com.instructure.canvasapi.model.Quiz;
 import com.instructure.canvasapi.utilities.*;
-
-import java.io.Serializable;
 
 import edu.ubbcluj.canvasAndroid.R;
 import retrofit.RetrofitError;
@@ -39,7 +33,6 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
     private final static String ID = "10000000000002";
     private final static String SECRET = "ru1UrVTFK3mHtiiVHiZghZqWQXNg12oOjjNjAyTcFBmEjlxGXm6yes7Ho4iPxGfH";
     private final static String REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob";
-    private static ExampleActivity exampleActivity;
     public final static String SECTION_DIVIDER = " \n \n ------------------- \n \n";
     private static Course c;    //a course used to get its quizzes
     private static Quiz q;
@@ -62,7 +55,6 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
         output = (TextView)findViewById(R.id.output);
         loadNextURLButton = (Button) findViewById(R.id.loadNextPage);
         scrollView = (ScrollView) findViewById(R.id.scrollview);
-        exampleActivity = this;
 
         //Set up a default error delegate. This will be the same one for all API calls
         //You can override the default ErrorDelegate in any CanvasCallBack constructor.
@@ -72,16 +64,6 @@ public class ExampleActivity extends Activity implements APIStatusDelegate, Erro
         //Set up the callback
 
         courseCanvasCallback = new CanvasCallback<Course[]>(this) {
-            @Override
-            public void cache(Course[] courses) {
-                //Cache will ALWAYS come before firstPage.
-                //Only the firstPage of any API is ever cached.
-                for (Course course : courses) {
-                    //          appendToTextView("[CACHED] " + course.getId() + ": " + course.getName());
-                }
-//                appendToTextView(SECTION_DIVIDER);
-            }
-
             @Override
             public void firstPage(Course[] courses, LinkHeaders linkHeaders, retrofit.client.Response response) {
                 //Save the next url for pagination.

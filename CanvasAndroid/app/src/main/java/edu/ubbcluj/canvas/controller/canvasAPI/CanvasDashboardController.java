@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.instructure.canvasapi.api.StreamAPI;
+import com.instructure.canvasapi.model.CanvasError;
 import com.instructure.canvasapi.model.StreamItem;
 import com.instructure.canvasapi.utilities.APIStatusDelegate;
 import com.instructure.canvasapi.utilities.CanvasCallback;
+import com.instructure.canvasapi.utilities.ErrorDelegate;
 import com.instructure.canvasapi.utilities.LinkHeaders;
 
 import java.util.ArrayList;
@@ -17,9 +19,10 @@ import edu.ubbcluj.canvas.model.ActivityStream;
 import edu.ubbcluj.canvas.persistence.PersistentCookieStore;
 import edu.ubbcluj.canvas.util.listener.InformationEvent;
 import edu.ubbcluj.canvas.util.listener.InformationListener;
+import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class CanvasDashboardController implements ActivityStreamController, APIStatusDelegate {
+public class CanvasDashboardController implements ActivityStreamController, APIStatusDelegate, ErrorDelegate {
     private List<ActivityStream> data;
     private List<InformationListener> actionList;
     private SharedPreferences sp;
@@ -112,12 +115,12 @@ public class CanvasDashboardController implements ActivityStreamController, APIS
             StreamAPI.getFirstPageUserStream(streamCanvasCallback);
         }
         //Check if we're at the end of the paginated list.
-        else {
+ /*       else {
             if (nextURL != null) {
                 StreamAPI.getNextPageStream(nextURL, streamCanvasCallback);
             }
         }
-    }
+ */   }
 
     public void setContext(Context context) {
         this.context = context;
@@ -141,6 +144,31 @@ public class CanvasDashboardController implements ActivityStreamController, APIS
     @Override
     public Context getContext() {
         return context;
+    }
+
+    @Override
+    public void noNetworkError(RetrofitError error, Context context) {
+
+    }
+
+    @Override
+    public void notAuthorizedError(RetrofitError error, CanvasError canvasError, Context context) {
+
+    }
+
+    @Override
+    public void invalidUrlError(RetrofitError error, Context context) {
+
+    }
+
+    @Override
+    public void serverError(RetrofitError error, Context context) {
+
+    }
+
+    @Override
+    public void generalError(RetrofitError error, CanvasError canvasError, Context context) {
+
     }
 
 }

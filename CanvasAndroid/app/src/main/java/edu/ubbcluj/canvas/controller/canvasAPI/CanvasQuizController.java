@@ -3,44 +3,45 @@ package edu.ubbcluj.canvas.controller.canvasAPI;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.instructure.canvasapi.api.CourseAPI;
+import com.instructure.canvasapi.api.QuizAPI;
 import com.instructure.canvasapi.model.Course;
+import com.instructure.canvasapi.model.Quiz;
 import com.instructure.canvasapi.utilities.APIStatusDelegate;
 import com.instructure.canvasapi.utilities.CanvasCallback;
 import com.instructure.canvasapi.utilities.CanvasRestAdapter;
 import com.instructure.canvasapi.utilities.LinkHeaders;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.ubbcluj.canvas.controller.ControllerFactory;
 import edu.ubbcluj.canvas.controller.CoursesController;
-import edu.ubbcluj.canvas.model.ActiveCourse;
+import edu.ubbcluj.canvas.controller.QuizController;
 import edu.ubbcluj.canvas.persistence.PersistentCookieStore;
 import edu.ubbcluj.canvas.util.listener.InformationEvent;
 import edu.ubbcluj.canvas.util.listener.InformationListener;
+import edu.ubbcluj.canvas.view.activity.CourseActivity;
 import retrofit.client.Response;
 
-public class CanvasCoursesController implements APIStatusDelegate, CoursesController {
-    private ArrayList<ActiveCourse> data;
-    private ArrayList<Course> canvasApiCourses;
+public class CanvasQuizController implements APIStatusDelegate, QuizController {
+    private ArrayList<Quiz> data;
     private List<InformationListener> actionList;
     private SharedPreferences sp;
-    private String nextURL = "";
-    private CanvasCallback<Course[]> courseCanvasCallback;
+    private String nextURL;
+    private CanvasCallback<Quiz[]> quizCanvasCallback;
     private Context context;
+    private Course c;
 
-    public CanvasCoursesController() {
+    public CanvasQuizController() {
         actionList = new LinkedList<>();
-        courseCanvasCallback = new CanvasCallback<Course[]>(this) {
+        nextURL = "";
+        quizCanvasCallback = new CanvasCallback<Quiz[]>(this) {
             @Override
-            public void firstPage(Course[] courses, LinkHeaders linkHeaders, Response response) {
+            public void firstPage(Quiz[] courses, LinkHeaders linkHeaders, Response response) {
                 data = new ArrayList<>();
-                canvasApiCourses = new ArrayList<>();
-                for (Course c : courses) {
-                    canvasApiCourses.add(c);
-                    data.add(new ActiveCourse((int)c.getId(), c.getName(), c.isFavorite()));
-                }
+                Collections.addAll(data, courses);
                 notifyListeners();
             }
         };
@@ -78,22 +79,33 @@ public class CanvasCoursesController implements APIStatusDelegate, CoursesContro
         persistentCookieStore.clear();
     }
 
-    public void makeAPICall() {
+    public void makeAPICall(int courseID) {
+        ControllerFactory cf = ControllerFactory.getInstance();
+        CoursesController cc = cf.getCoursesController();
+        ((CanvasCoursesController)cc).setContext(context);
+        cc.setSharedPreferences(sp);
+        ((CanvasCoursesController)cc).makeAPICall();
+        c = ((CanvasCoursesController)cc).getCourseByID((long) courseID);
+        getQuizzes();
+    }
+
+    public void getQuizzes() {
         //Check if the first api call has come back.
         if ("".equals(nextURL)) {
-            CourseAPI.getAllFavoriteCourses(courseCanvasCallback);
+            QuizAPI.getFirstPageQuizzes(c, quizCanvasCallback);
+        }
+        //Check if we're at the end of the paginated list.
+        else {
+            if (nextURL != null) {
+                QuizAPI.getNextPageQuizzes(nextURL, quizCanvasCallback);
+            }
         }
     }
 
     @Override
-    public List<ActiveCourse> getData() {
+    public List<Quiz> getData() {
         return data;
     }
-
-    public List<Course> getCoursesData() {
-        return canvasApiCourses;
-    }
-
 
     public void setContext(Context context) {
         this.context = context;
@@ -117,15 +129,6 @@ public class CanvasCoursesController implements APIStatusDelegate, CoursesContro
     @Override
     public Context getContext() {
         return context;
-    }
-
-    public Course getCourseByID(long id) {
-        for (Course c: canvasApiCourses) {
-            if (c.getId() == id) {
-                return c;
-            }
-        }
-        return null;
     }
 
 }

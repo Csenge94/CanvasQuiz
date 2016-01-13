@@ -4,10 +4,12 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.instructure.canvasapi.model.CanvasError;
+import com.instructure.canvasapi.utilities.APIStatusDelegate;
+import com.instructure.canvasapi.utilities.CanvasCallback;
 
 import retrofit.RetrofitError;
 
-public class CanvasErrorDelegate implements com.instructure.canvasapi.utilities.ErrorDelegate {
+public class CanvasErrorDelegate implements com.instructure.canvasapi.utilities.ErrorDelegate, APIStatusDelegate {
 
     @Override
     public void noNetworkError(RetrofitError error, Context context) {
@@ -32,5 +34,25 @@ public class CanvasErrorDelegate implements com.instructure.canvasapi.utilities.
     @Override
     public void generalError(RetrofitError error, CanvasError canvasError, Context context) {
         Toast.makeText(context, "Error", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onCallbackStarted() {
+
+    }
+
+    @Override
+    public void onCallbackFinished(CanvasCallback.SOURCE source) {
+
+    }
+
+    @Override
+    public void onNoNetwork() {
+
+    }
+
+    @Override
+    public Context getContext() {
+        return null;
     }
 }

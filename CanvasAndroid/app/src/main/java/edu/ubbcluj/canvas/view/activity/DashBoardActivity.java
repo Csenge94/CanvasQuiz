@@ -63,7 +63,7 @@ public class DashBoardActivity extends BaseActivity {
 				if (swipeView != null)
 					swipeView.setRefreshing(false);
 
-				if (CheckNetwork.isNetworkOnline(DashBoardActivity.this)) {
+				if (!CheckNetwork.isNetworkOnline(DashBoardActivity.this)) {
 					Toast.makeText(DashBoardActivity.this, "No network connection!", Toast.LENGTH_LONG).show();
 				} else {
 					as.setRead_state(true);
@@ -200,10 +200,10 @@ public class DashBoardActivity extends BaseActivity {
 		}
 	}
 
-	public List<ActivityStream> getActivityStream() {
+/*	public List<ActivityStream> getActivityStream() {
 		return activityStream;
 	}
-
+*/
 	public void setActivityStream(List<ActivityStream> activityStream) {
 		this.activityStream = activityStream;
 		setList();
