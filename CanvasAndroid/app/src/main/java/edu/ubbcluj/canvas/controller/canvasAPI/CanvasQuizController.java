@@ -2,6 +2,7 @@ package edu.ubbcluj.canvas.controller.canvasAPI;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.instructure.canvasapi.api.QuizAPI;
 import com.instructure.canvasapi.model.Course;
@@ -16,13 +17,10 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.ubbcluj.canvas.controller.ControllerFactory;
-import edu.ubbcluj.canvas.controller.CoursesController;
 import edu.ubbcluj.canvas.controller.QuizController;
 import edu.ubbcluj.canvas.persistence.PersistentCookieStore;
 import edu.ubbcluj.canvas.util.listener.InformationEvent;
 import edu.ubbcluj.canvas.util.listener.InformationListener;
-import edu.ubbcluj.canvas.view.activity.CourseActivity;
 import retrofit.client.Response;
 
 public class CanvasQuizController implements APIStatusDelegate, QuizController {
@@ -32,7 +30,6 @@ public class CanvasQuizController implements APIStatusDelegate, QuizController {
     private String nextURL;
     private CanvasCallback<Quiz[]> quizCanvasCallback;
     private Context context;
-    private Course c;
 
     public CanvasQuizController() {
         actionList = new LinkedList<>();
@@ -79,17 +76,7 @@ public class CanvasQuizController implements APIStatusDelegate, QuizController {
         persistentCookieStore.clear();
     }
 
-    public void makeAPICall(int courseID) {
-        ControllerFactory cf = ControllerFactory.getInstance();
-        CoursesController cc = cf.getCoursesController();
-        ((CanvasCoursesController)cc).setContext(context);
-        cc.setSharedPreferences(sp);
-        ((CanvasCoursesController)cc).makeAPICall();
-        c = ((CanvasCoursesController)cc).getCourseByID((long) courseID);
-        getQuizzes();
-    }
-
-    public void getQuizzes() {
+    public void makeAPICall(Course c) {
         //Check if the first api call has come back.
         if ("".equals(nextURL)) {
             QuizAPI.getFirstPageQuizzes(c, quizCanvasCallback);

@@ -25,9 +25,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.instructure.canvasapi.model.Course;
 import com.instructure.canvasapi.model.Quiz;
 
+import edu.ubbcluj.canvas.controller.CoursesController;
 import edu.ubbcluj.canvas.controller.QuizController;
+import edu.ubbcluj.canvas.controller.canvasAPI.CanvasCoursesController;
 import edu.ubbcluj.canvas.controller.canvasAPI.CanvasQuizController;
 import edu.ubbcluj.canvas.view.adapter.CustomArrayAdapterQuizzes;
 import edu.ubbcluj.canvasAndroid.R;
@@ -70,9 +73,11 @@ public class CourseActivity extends BaseActivity implements ActionBar.TabListene
 	ViewPager mViewPager;
 
 	private static int courseID;
+	private static Course course;
 	private String courseName;
 	private ActionBar actionBar;
 	private static CourseActivity courseActivity;
+	private static CanvasCoursesController cc;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +93,12 @@ public class CourseActivity extends BaseActivity implements ActionBar.TabListene
 		Bundle bundle = getIntent().getExtras();
 		courseID = bundle.getInt("id");
 		courseName = bundle.getString("name");
+
+		ControllerFactory cf = ControllerFactory.getInstance();
+		cc = cf.getCoursesController2();
+		((CanvasCoursesController)cc).setContext(this);
+		cc.setSharedPreferences(getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE));
+		((CanvasCoursesController)cc).makeAPICall();
 
 		// Create the adapter that will return a fragment for each of the five
 		// primary sections of the activity.
@@ -709,7 +720,9 @@ public class CourseActivity extends BaseActivity implements ActionBar.TabListene
 
 				quizzes = new ArrayList<>();
 				quizController = cf.getQuizController();
+				Log.d("logolunk", "quiz controller created");
 				((CanvasQuizController)quizController).setContext(courseActivity);
+				Log.d("logolunk", "quiz controller activity set");
 				quizController.setSharedPreferences(sp);
 				quizController.addInformationListener(new InformationListener() {
 
@@ -727,7 +740,11 @@ public class CourseActivity extends BaseActivity implements ActionBar.TabListene
 					setProgressGone();
 				} else {
 					Log.d("logolunk", courseID + " idju kurzus quiz");
-					((CanvasQuizController)quizController).makeAPICall(courseID);
+					while (course == null) {
+						course = ((CanvasCoursesController)cc).getCourseByID(courseID);
+					}
+					((CanvasQuizController)quizController).makeAPICall(course);
+					Log.d("logolunk", "make api call terminated");
 				}
 
 				swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe);
@@ -757,7 +774,10 @@ public class CourseActivity extends BaseActivity implements ActionBar.TabListene
 								}
 							});
 							Log.d("logolunk", courseID + " idju kurzus quiz");
-							((CanvasQuizController)quizController).makeAPICall(courseID);
+							while (course == null) {
+								course = ((CanvasCoursesController)cc).getCourseByID(courseID);
+							}
+							((CanvasQuizController)quizController).makeAPICall(course);
 						}
 					}
 				});

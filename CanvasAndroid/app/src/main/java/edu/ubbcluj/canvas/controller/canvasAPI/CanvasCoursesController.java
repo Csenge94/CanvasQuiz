@@ -2,6 +2,7 @@ package edu.ubbcluj.canvas.controller.canvasAPI;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.instructure.canvasapi.api.CourseAPI;
 import com.instructure.canvasapi.model.Course;
@@ -26,7 +27,6 @@ public class CanvasCoursesController implements APIStatusDelegate, CoursesContro
     private ArrayList<Course> canvasApiCourses;
     private List<InformationListener> actionList;
     private SharedPreferences sp;
-    private String nextURL = "";
     private CanvasCallback<Course[]> courseCanvasCallback;
     private Context context;
 
@@ -79,10 +79,7 @@ public class CanvasCoursesController implements APIStatusDelegate, CoursesContro
     }
 
     public void makeAPICall() {
-        //Check if the first api call has come back.
-        if ("".equals(nextURL)) {
             CourseAPI.getAllFavoriteCourses(courseCanvasCallback);
-        }
     }
 
     @Override
@@ -90,13 +87,13 @@ public class CanvasCoursesController implements APIStatusDelegate, CoursesContro
         return data;
     }
 
-    public List<Course> getCoursesData() {
-        return canvasApiCourses;
-    }
-
-
     public void setContext(Context context) {
+
+        Log.d("logolunk", "canvas courses controller set context");
+
         this.context = context;
+        Log.d("logolunk", "canvas courses controller set context end");
+
     }
 
     @Override
