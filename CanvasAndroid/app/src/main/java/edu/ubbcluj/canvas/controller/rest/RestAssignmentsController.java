@@ -130,7 +130,7 @@ public class RestAssignmentsController extends AsyncTask<String, Void, String>
     }
 
     /**
-     * Converts a JSON Object to an {@link edu.ubbcluj.canvasAndroid.model.Assignment} object.
+     * Converts a JSON Object to an {@link edu.ubbcluj.canvas.model.Assignment} object.
      */
     private Assignment convertJSONtoAssignment(JSONObject jObj) {
         Assignment assignment = new Assignment();
@@ -189,7 +189,7 @@ public class RestAssignmentsController extends AsyncTask<String, Void, String>
     }
 
     /**
-     * Converts a JSON Object to an {@link edu.ubbcluj.canvasAndroid.model.Submission} object.
+     * Converts a JSON Object to an {@link edu.ubbcluj.canvas.model.Submission} object.
      */
     private Submission convertJSONtoSubmission(JSONObject jObj) {
         Submission submission = new Submission();
@@ -259,7 +259,7 @@ public class RestAssignmentsController extends AsyncTask<String, Void, String>
     }
 
     /**
-     * Converts a JSON Object to an {@link edu.ubbcluj.canvasAndroid.model.Attachment} object.
+     * Converts a JSON Object to an {@link edu.ubbcluj.canvas.model.SubmissionAttachment} object.
      */
     private SubmissionAttachment convertJSONtoAttachment(JSONObject jObj) {
         SubmissionAttachment attachment = new SubmissionAttachment();
@@ -290,7 +290,7 @@ public class RestAssignmentsController extends AsyncTask<String, Void, String>
     }
 
     /**
-     * Converts a JSON Object to an {@link edu.ubbcluj.canvasAndroid.model.Comment} object.
+     * Converts a JSON Object to an {@link edu.ubbcluj.canvas.model.SubmissionComment} object.
      */
     private SubmissionComment convertJSONtoComment(JSONObject jObj) {
         SubmissionComment comment = new SubmissionComment();

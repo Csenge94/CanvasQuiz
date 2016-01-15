@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="edu.ubbcluj.canvasAndroid"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    package="edu.ubbcluj.canvasAndroid" >
 
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="21" />
+    <uses-sdk />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -129,7 +125,7 @@
         </activity>
     </application>
 
-    <instrumentation android:name="android.test.InstrumentationTestRunner"
-        android:targetPackage="edu.ubbcluj.canvas" android:label="Tests for Quiz" />
+    <!--<instrumentation android:name="android.test.InstrumentationTestRunner"-->
+        <!--android:targetPackage="edu.ubbcluj.canvas" android:label="Tests for Quiz" />-->
 
 </manifest>

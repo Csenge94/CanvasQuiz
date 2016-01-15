@@ -55,21 +55,6 @@ public class Assignment {
         this.dueAt = dueAt;
     }
 
-    public String getLockAt() {
-        return lockAt;
-    }
-
-    public void setLockAt(String lockAt) {
-        this.lockAt = lockAt;
-    }
-
-    public String getUnlockAt() {
-        return unlockAt;
-    }
-
-    public void setUnlockAt(String unlockAt) {
-        this.unlockAt = unlockAt;
-    }
 
     public int getCourseId() {
         return courseId;
@@ -95,14 +80,6 @@ public class Assignment {
         this.htmlUrl = htmlUrl;
     }
 
-    public int getAssignmentGroupId() {
-        return assignmentGroupId;
-    }
-
-    public void setAssignmentGroupId(int assignmentGroupId) {
-        this.assignmentGroupId = assignmentGroupId;
-    }
-
     public int getPosition() {
         return position;
     }
@@ -111,13 +88,6 @@ public class Assignment {
         this.position = position;
     }
 
-    public boolean isMuted() {
-        return muted;
-    }
-
-    public void setMuted(boolean muted) {
-        this.muted = muted;
-    }
 
     public double getPointsPossible() {
         return pointsPossible;
@@ -125,30 +95,6 @@ public class Assignment {
 
     public void setPointsPossible(double pointsPossible) {
         this.pointsPossible = pointsPossible;
-    }
-
-    public String[] getSubmissionTypes() {
-        return submissionTypes;
-    }
-
-    public void setSubmissionTypes(String[] submissionTypes) {
-        this.submissionTypes = submissionTypes;
-    }
-
-    public String getGradingType() {
-        return gradingType;
-    }
-
-    public void setGradingType(String gradingType) {
-        this.gradingType = gradingType;
-    }
-
-    public String getLockInfo() {
-        return lockInfo;
-    }
-
-    public void setLockInfo(String lockInfo) {
-        this.lockInfo = lockInfo;
     }
 
     public String getLockExplanation() {

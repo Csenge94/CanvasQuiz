@@ -2,32 +2,25 @@ package edu.ubbcluj.canvas.controller.canvasAPI;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.instructure.canvasapi.api.AssignmentAPI;
 import com.instructure.canvasapi.model.Assignment;
-//import edu.ubbcluj.canvas.model.Assignment;
 import com.instructure.canvasapi.model.CanvasError;
 import com.instructure.canvasapi.model.Course;
 import com.instructure.canvasapi.utilities.APIStatusDelegate;
 import com.instructure.canvasapi.utilities.CanvasCallback;
-import com.instructure.canvasapi.utilities.CanvasRestAdapter;
 import com.instructure.canvasapi.utilities.ErrorDelegate;
 import com.instructure.canvasapi.utilities.LinkHeaders;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import edu.ubbcluj.canvas.controller.AssignmentsController;
-import edu.ubbcluj.canvas.controller.ControllerFactory;
-import edu.ubbcluj.canvas.controller.CoursesController;
 
 import edu.ubbcluj.canvas.persistence.PersistentCookieStore;
 import edu.ubbcluj.canvas.util.listener.InformationEvent;
 import edu.ubbcluj.canvas.util.listener.InformationListener;
-import edu.ubbcluj.canvas.view.activity.CourseActivity;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
@@ -62,7 +55,7 @@ public class CanvasAssignmentsController implements AssignmentsController, Error
                     localAssignment.setName(a.getName());
                     localAssignment.setCourseName(c.getName());
                     localAssignment.setDescription(a.getDescription());
-                    localAssignment.setDueAt(a.getDueDate().toString());
+//                    localAssignment.setDueAt(a.getDueDate().toString());
                     localAssignment.setHtmlUrl(a.getHtmlUrl());
                     localAssignment.setPosition(a.getPosition());
                     localAssignment.setPointsPossible(a.getPointsPossible());
@@ -135,21 +128,29 @@ public class CanvasAssignmentsController implements AssignmentsController, Error
 
     }
 
-    public void makeAPICall(int courseID) {
-        CanvasCoursesController cc;
-        ControllerFactory cf = ControllerFactory.getInstance();
-        cc = cf.getCoursesController2();
-        (cc).setContext(context);
-        cc.setSharedPreferences(sp);
-        Log.d("logolunk", "hivas elott");
-
-        while (c == null) {
-            Log.d("logolunk", "belement");
-            cc.makeAPICall();
-            c = cc.getCourseByID(courseID);
-
-		}
-        Log.d("logolunk", "kijott");
+    public void makeAPICall(Course c) {
+//        CanvasCoursesController cc;
+//        ControllerFactory cf = ControllerFactory.getInstance();
+//        cc = cf.getCoursesController2();
+//        (cc).setContext(context);
+//        cc.setSharedPreferences(sp);
+//        Log.d("logolunk", "hivas elott");
+//
+//        while (c == null) {
+//            Log.d("logolunk", "belement");
+//            try {
+//                cc.makeAPICall();
+//                Thread.sleep(3000);
+//                c = cc.getCourseByID(courseID);
+//                Thread.sleep(3000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//
+//
+//		}
+//        Log.d("logolunk", "kijott");
+        this.c=c;
         AssignmentAPI.getAllAssignmentsExhaustive(c.getId(), assignmentCanvasCallback);
 
     }

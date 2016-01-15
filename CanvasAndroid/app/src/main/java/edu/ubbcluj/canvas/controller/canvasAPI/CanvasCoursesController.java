@@ -35,15 +35,15 @@ public class CanvasCoursesController implements APIStatusDelegate, CoursesContro
         courseCanvasCallback = new CanvasCallback<Course[]>(this) {
             @Override
             public void firstPage(Course[] courses, LinkHeaders linkHeaders, Response response) {
-                data = new ArrayList<>();
-                canvasApiCourses = new ArrayList<>();
-                for (Course c : courses) {
+               for (Course c : courses) {
                     canvasApiCourses.add(c);
                     data.add(new ActiveCourse((int)c.getId(), c.getName(), c.isFavorite()));
                 }
                 notifyListeners();
             }
         };
+        data = new ArrayList<>();
+        canvasApiCourses = new ArrayList<>();
     }
 
     @Override
@@ -87,6 +87,11 @@ public class CanvasCoursesController implements APIStatusDelegate, CoursesContro
         return data;
     }
 
+    public List<Course> getCourses() {
+        return canvasApiCourses;
+    }
+
+
     public void setContext(Context context) {
 
         Log.d("logolunk", "canvas courses controller set context");
@@ -118,6 +123,7 @@ public class CanvasCoursesController implements APIStatusDelegate, CoursesContro
 
     public Course getCourseByID(long id) {
         for (Course c: canvasApiCourses) {
+            Log.d("logolunk", c.getId() + " itt vagyok");
             if (c.getId() == id) {
                 return c;
             }

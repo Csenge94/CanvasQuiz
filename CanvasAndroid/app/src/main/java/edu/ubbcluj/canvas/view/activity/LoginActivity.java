@@ -16,6 +16,7 @@ import com.instructure.canvasapi.model.User;
 import com.instructure.canvasapi.utilities.APIHelpers;
 import com.instructure.canvasapi.utilities.APIStatusDelegate;
 import com.instructure.canvasapi.utilities.CanvasCallback;
+import com.instructure.canvasapi.utilities.CanvasRestAdapter;
 import com.instructure.canvasapi.utilities.LinkHeaders;
 import com.instructure.canvasapi.utilities.UserCallback;
 
@@ -82,7 +83,8 @@ public class LoginActivity extends Activity implements APIStatusDelegate {
 				startActivityForResult(intent, 0);
 			} else {
 				UserAPI.getSelf(userCallback);
-				loginCompleted();
+				CanvasRestAdapter.setupInstance(this, token, DOMAIN);
+				//loginCompleted();
 			}
 		}
 	}
@@ -118,6 +120,7 @@ public class LoginActivity extends Activity implements APIStatusDelegate {
 		((CanvasCoursesController)coursesController).setContext(this);
 		coursesController.setSharedPreferences(getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE));
 
+		Log.d("logolunk", "ez itt mindig 2x hivodik meg es nem tudom hogy miert");
 		coursesController.addInformationListener(new InformationListener() {
 
 			@Override

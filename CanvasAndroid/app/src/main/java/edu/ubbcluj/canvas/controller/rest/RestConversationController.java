@@ -121,7 +121,7 @@ public class RestConversationController extends AsyncTask<String, Void, String>
 	}
 
 	/**
-	 * Converts a JSON Object to an {@link edu.ubbcluj.canvasAndroid.model.Conversation} object.
+	 * Converts a JSON Object to an {@link edu.ubbcluj.canvas.model.Conversation} object.
 	 */
 	private Conversation convertJSONtoAS(JSONObject obj) {
 		Conversation conversation = new Conversation();

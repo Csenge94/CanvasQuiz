@@ -30,6 +30,7 @@ import com.instructure.canvasapi.model.Quiz;
 
 import edu.ubbcluj.canvas.controller.CoursesController;
 import edu.ubbcluj.canvas.controller.QuizController;
+import edu.ubbcluj.canvas.controller.canvasAPI.CanvasAssignmentsController;
 import edu.ubbcluj.canvas.controller.canvasAPI.CanvasCoursesController;
 import edu.ubbcluj.canvas.controller.canvasAPI.CanvasQuizController;
 import edu.ubbcluj.canvas.view.adapter.CustomArrayAdapterQuizzes;
@@ -81,33 +82,49 @@ public class CourseActivity extends BaseActivity implements ActionBar.TabListene
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.d("logolunk", "1");
 		super.onCreate(savedInstanceState);
-
+		Log.d("logolunk", "2");
 		// Set up the action bar.
 		actionBar = getSupportActionBar();
+		Log.d("logolunk", "3");
 		assert actionBar != null;
+		Log.d("logolunk", "4");
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		Log.d("logolunk", "5");
 		courseActivity = this;
-
+		Log.d("logolunk", "6");
 		// get the course id
 		Bundle bundle = getIntent().getExtras();
+		Log.d("logolunk", "7");
 		courseID = bundle.getInt("id");
+		Log.d("logolunk", "8");
 		courseName = bundle.getString("name");
+		Log.d("logolunk", "9");
 
 		ControllerFactory cf = ControllerFactory.getInstance();
+		Log.d("logolunk", "10");
 		cc = cf.getCoursesController2();
-		((CanvasCoursesController)cc).setContext(this);
+		Log.d("logolunk", "11");
+		(cc).setContext(this);
+		Log.d("logolunk", "12");
 		cc.setSharedPreferences(getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE));
-		((CanvasCoursesController)cc).makeAPICall();
+		Log.d("logolunk", "13");
+		cc.makeAPICall();
+		Log.d("logolunk", "14");
 
 		// Create the adapter that will return a fragment for each of the five
 		// primary sections of the activity.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(
 				getSupportFragmentManager());
-
+		Log.d("logolunk", "15");
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
+		Log.d("logolunk", "16");
+		Log.d("logolunk", "setAdapter" + mSectionsPagerAdapter);
+		Log.d("logolunk", "17");
 		mViewPager.setAdapter(mSectionsPagerAdapter);
+		Log.d("logolunk", "18");
 
 		// When swiping between different sections, select the corresponding
 		// tab. We can also use ActionBar.Tab#select() to do this if we have
@@ -116,38 +133,49 @@ public class CourseActivity extends BaseActivity implements ActionBar.TabListene
 				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 					@Override
 					public void onPageSelected(int position) {
+						Log.d("logolunk", "19");
 						actionBar.setSelectedNavigationItem(position);
 					}
 				});
-
+		Log.d("logolunk", "20");
 		// For each of the sections in the app, add a tab to the action bar.
 		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
 			// Create a tab with text corresponding to the page title defined by
 			// the adapter. Also specify this Activity object, which implements
 			// the TabListener interface, as the callback (listener) for when
 			// this tab is selected.
+			Log.d("logolunk", "21");
 			View tabView = this.getLayoutInflater().inflate(R.layout.actionbar_tab, null);
+			Log.d("logolunk", "22");
 			TextView tabText = (TextView) tabView.findViewById(R.id.tabText);
+			Log.d("logolunk", "23");
 			tabText.setText(mSectionsPagerAdapter.getPageTitle(i));
+			Log.d("logolunk", "24");
 			actionBar.addTab(actionBar.newTab().setCustomView(tabView).setTabListener(this));
+			Log.d("logolunk", "25");
 		}
 	}
 
 	@Override
 	public void restoreActionBar() {
+		Log.d("logolunk", "26");
 		super.restoreActionBar();
+		Log.d("logolunk", "27");
 		actionBar.setTitle(courseName);
+		Log.d("logolunk", "28");
 	}
 
 	@Override
 	public void onTabSelected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
+		Log.d("logolunk", "29");
 		// When the given tab is selected, switch to the corresponding page in
 		// the ViewPager.
 
 		if (!CheckNetwork.isNetworkOnline(this)) {
 			Toast.makeText(this, "No network connection!", Toast.LENGTH_LONG).show();
 		}
+		Log.d("logolunk", "30");
 		mViewPager.setCurrentItem(tab.getPosition());
 	}
 
@@ -173,6 +201,8 @@ public class CourseActivity extends BaseActivity implements ActionBar.TabListene
 
 		@Override
 		public Fragment getItem(int position) {
+			Log.d("logolunk", "Ezt a szart valami 2x hivja meg de nem tudom hogy mi mert nem hivja meg semmi");
+			Log.d("logolunk", "31");
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a PlaceholderFragment (defined as a static inner class
 			// below).
@@ -182,12 +212,15 @@ public class CourseActivity extends BaseActivity implements ActionBar.TabListene
 		@Override
 		public int getCount() {
 			// Show 5 total pages.
+			Log.d("logolunk", "32");
 			return 5;
 		}
 
 		@Override
 		public CharSequence getPageTitle(int position) {
+			Log.d("logolunk", "33");
 			Locale l = Locale.getDefault();
+			Log.d("logolunk", "34");
 			switch (position) {
 			case 0:
 				return getString(R.string.tab_todo).toUpperCase(l);
@@ -237,97 +270,138 @@ public class CourseActivity extends BaseActivity implements ActionBar.TabListene
 		 * Returns a new instance of this fragment for the given section number.
 		 */
 		public static PlaceholderFragment newInstance(int sectionNumber) {
+			Log.d("logolunk", "51");
 			PlaceholderFragment fragment = new PlaceholderFragment();
+			Log.d("logolunk", "52");
 			Bundle args = new Bundle();
-			args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+			Log.d("logolunk", "53");
+			Log.d("logolunk", sectionNumber+ "a szam2");
+			args.putInt(ARG_SECTION_NUMBER, sectionNumber - 1);
+			Log.d("logolunk", "54");
 			fragment.setArguments(args);
+			Log.d("logolunk", "55");
 			return fragment;
 		}
 
 		public PlaceholderFragment() {
 			// Get the activity stream
+			Log.d("logolunk", "56");
 			cf = ControllerFactory.getInstance();
+			Log.d("logolunk", "35");
 		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-
+			Log.d("logolunk", "36");
 			int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
-
+			Log.d("logolunk", "37");
 			View rootView;
+			Log.d("logolunk", "57");
 
 			final SharedPreferences sp = this.getActivity().getSharedPreferences("CanvasAndroid", Context.MODE_PRIVATE);
 
+			Log.d("logolunk", sectionNumber+ "a szam");
 			switch (sectionNumber) {
 			//to do
 			case 1: {
+				Log.d("logolunk", "58");
 				ToDoController todoController;
+				Log.d("logolunk", "59");
 				rootView = inflater.inflate(R.layout.fragment_assignment, null);
 
+				Log.d("logolunk", "60");
 				// Set the progressbar visibility
 				list = (ListView) rootView.findViewById(R.id.list);
+				Log.d("logolunk", "61");
 				viewContainer = rootView.findViewById(R.id.linProg);
+				Log.d("logolunk", "62");
 				viewContainer.setVisibility(View.VISIBLE);
+				Log.d("logolunk", "63");
 				list.setOnItemClickListener(new OnItemClickListener() {
 
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,
-							int position, long id) {
+											int position, long id) {
 						Assignment assignment = assignments.get(position);
+						Log.d("logolunk", "64");
 
 						if (swipeView != null)
 							swipeView.setRefreshing(false);
 
-						if(!CheckNetwork.isNetworkOnline(getActivity())) {
+						Log.d("logolunk", "65");
+						if (!CheckNetwork.isNetworkOnline(getActivity())) {
 							Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
 						} else {
+							Log.d("logolunk", "66");
 							Intent assignmentIntent = new Intent(getActivity(), AssignmentActivity.class);
 
+							Log.d("logolunk", "67");
 							Bundle bundle = new Bundle();
+							Log.d("logolunk", "68");
 							bundle.putInt("course_id", assignment.getCourseId());
+							Log.d("logolunk", "69");
 							bundle.putInt("assignment_id", assignment.getId());
 							assignmentIntent.putExtras(bundle);
+							Log.d("logolunk", "70");
 							startActivity(assignmentIntent);
+							Log.d("logolunk", "71");
 						}
 					}
 				});
 
+				Log.d("logolunk", "72");
 				assignments = new ArrayList<>();
+				Log.d("logolunk", "73");
 				todoController = cf.getToDoController();
+				Log.d("logolunk", "74");
 				todoController.setSharedPreferences(sp);
+				Log.d("logolunk", "75");
 				todoController.addInformationListener(new InformationListener() {
 
 					@Override
 					public void onComplete(InformationEvent e) {
 						ToDoController ad = (ToDoController) e.getSource();
+						Log.d("logolunk", "76");
 
 						setProgressGone();
+						Log.d("logolunk", "77");
 						setAssignments(ad.getData());
+						Log.d("logolunk", "78");
 						toDoAdapter = new CustomArrayAdapterToDo(getActivity(), assignments);
+						Log.d("logolunk", "79");
 						list.setAdapter(toDoAdapter);
+						Log.d("logolunk", "80");
 					}
 				});
 
 				if(!CheckNetwork.isNetworkOnline(getActivity())) {
 					setProgressGone();
+					Log.d("logolunk", "81");
 				} else {
 					Log.d("logolunk", courseID + " idju kurzus todoja");
 					//canvasToDoController.makeApiCall(courseID);
 				}
 
 				swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe);
+				Log.d("logolunk", "82");
 				swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 						@Override
 						public void onRefresh() {
+							Log.d("logolunk", "83");
 							if(!CheckNetwork.isNetworkOnline(getActivity())) {
 								swipeView.setRefreshing(false);
 								Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
+								Log.d("logolunk", "84");
 							} else {
 								ToDoController todoController;
+								Log.d("logolunk", "85");
 								todoController = cf.getToDoController();
+								Log.d("logolunk", "86");
 								todoController.setSharedPreferences(sp);
+								Log.d("logolunk", "87");
 								RestInformation.clearData();
+								Log.d("logolunk", "88");
 
 								todoController.addInformationListener(new InformationListener() {
 
@@ -335,11 +409,17 @@ public class CourseActivity extends BaseActivity implements ActionBar.TabListene
 									public void onComplete(InformationEvent e) {
 										ToDoController ad = (ToDoController) e.getSource();
 
+										Log.d("logolunk", "89");
 										setProgressGone();
+										Log.d("logolunk", "90");
 										setAssignments(ad.getData());
+										Log.d("logolunk", "91");
 										toDoAdapter = new CustomArrayAdapterToDo(getActivity(), assignments);
+										Log.d("logolunk", "92");
 										list.setAdapter(toDoAdapter);
+										Log.d("logolunk", "93");
 										swipeView.setRefreshing(false);
+										Log.d("logolunk", "94");
 									}
 								});
 								Log.d("logolunk", courseID + " idju kurzus todoja");
@@ -350,109 +430,122 @@ public class CourseActivity extends BaseActivity implements ActionBar.TabListene
 				break;
 			}
 			//assignment
-			case 2: {
-				rootView = inflater.inflate(R.layout.fragment_assignment, null);
+				case 2: {
+					rootView = inflater.inflate(R.layout.fragment_assignment, null);
 
-				// Set the progressbar visibility
-				list = (ListView) rootView.findViewById(R.id.list);
-				viewContainer = rootView.findViewById(R.id.linProg);
-				viewContainer.setVisibility(View.VISIBLE);
+					// Set the progressbar visibility
+					list = (ListView) rootView.findViewById(R.id.list);
+					viewContainer = rootView.findViewById(R.id.linProg);
+					viewContainer.setVisibility(View.VISIBLE);
 
-				AssignmentsController assignmentsController;
-				assignmentsController = cf.getAssignmentsController();
-				assignmentsController.setSharedPreferences(sp);
+					AssignmentsController assignmentsController;
 
-				list.setOnItemClickListener(new OnItemClickListener() {
 
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view,
-							int position, long id) {
-					Assignment assignment = assignments.get(position);
+					list.setOnItemClickListener(new OnItemClickListener() {
 
-					if (swipeView != null)
-						swipeView.setRefreshing(false);
+						@Override
+						public void onItemClick(AdapterView<?> parent, View view,
+												int position, long id) {
+							Assignment assignment = assignments.get(position);
 
-					if(!CheckNetwork.isNetworkOnline(getActivity())) {
-						Toast.makeText(getActivity(), "No network connection!",
-								Toast.LENGTH_LONG).show();
-					} else {
-						Intent assignmentIntent = new Intent(getActivity(),
-								AssignmentActivity.class);
+							if (swipeView != null)
+								swipeView.setRefreshing(false);
 
-						Bundle bundle = new Bundle();
-						bundle.putInt("course_id", assignment.getCourseId());
-						bundle.putInt("assignment_id", assignment.getId());
+							if(!CheckNetwork.isNetworkOnline(getActivity())) {
+								Toast.makeText(getActivity(), "No network connection!",
+										Toast.LENGTH_LONG).show();
+							} else {
+								Intent assignmentIntent = new Intent(getActivity(),
+										AssignmentActivity.class);
 
-						assignmentIntent.putExtras(bundle);
+								Bundle bundle = new Bundle();
+								bundle.putInt("course_id", assignment.getCourseId());
+								bundle.putInt("assignment_id", assignment.getId());
 
-						startActivity(assignmentIntent);
-					}
-					}
-				});
+								assignmentIntent.putExtras(bundle);
 
-				assignments = new ArrayList<>();
-
-				// assignmentsController.setPlaceholderFragment(this);
-				assignmentsController
-						.addInformationListener(new InformationListener() {
-
-							@Override
-							public void onComplete(InformationEvent e) {
-								AssignmentsController ad = (AssignmentsController) e
-										.getSource();
-
-								setProgressGone();
-								setAssignments(ad.getData());
-								assignmentsAdapter = new CustomArrayAdapterAssignments(
-										getActivity(), assignments);
-								list.setAdapter(assignmentsAdapter);
+								startActivity(assignmentIntent);
 							}
-						});
+						}
+					});
 
-				if (!CheckNetwork.isNetworkOnline(getActivity())) {
-						setProgressGone();
-				} else {
-					Log.d("logolunk", courseID + " idju kurzus assignment");
-					//canvasAssignmentController.makeApiCall(courseID);
-				}
+					assignments = new ArrayList<>();
 
-				final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView
-						.findViewById(R.id.swipe);
-
-				swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-					@Override
-					public void onRefresh() {
-						if (!CheckNetwork.isNetworkOnline(getActivity())) {
-							swipeView.setRefreshing(false);
-							Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
-						} else {
-							AssignmentsController assignmentsController;
-							assignmentsController = cf.getAssignmentsController();
-							assignmentsController.setSharedPreferences(sp);
-							RestInformation.clearData();
-
-							// assignmentsController.setPlaceholderFragment(this);
-							assignmentsController.addInformationListener(new InformationListener() {
+					// assignmentsController.setPlaceholderFragment(this);
+					assignmentsController = cf.getAssignmentsController2();
+					((CanvasAssignmentsController)assignmentsController).setContext(courseActivity);
+					assignmentsController.setSharedPreferences(sp);
+					assignmentsController
+							.addInformationListener(new InformationListener() {
 
 								@Override
-								public void onComplete(
-										InformationEvent e) {
-									AssignmentsController ad = (AssignmentsController) e.getSource();
+								public void onComplete(InformationEvent e) {
+									AssignmentsController ad = (CanvasAssignmentsController) e
+											.getSource();
 
 									setProgressGone();
 									setAssignments(ad.getData());
-									assignmentsAdapter = new CustomArrayAdapterAssignments(getActivity(), assignments);
+									assignmentsAdapter = new CustomArrayAdapterAssignments(
+											getActivity(), assignments);
 									list.setAdapter(assignmentsAdapter);
-									swipeView.setRefreshing(false);
 								}
 							});
-							Log.d("logolunk", courseID + " idju kurzus assignment");
-							//canvasAssignmentController.makeApiCall(courseID);
+
+					if (!CheckNetwork.isNetworkOnline(getActivity())) {
+						setProgressGone();
+					} else {
+//					Log.d("logolunk", courseID + " idju kurzus assignment");
+//					while (cc.getCourses() == null) {}
+						Log.d("logolunk", courseID + " idju kurzus assignment2");
+						while (course == null || courseID != course.getId()) {
+								course = cc.getCourseByID(courseID);
 						}
+						Log.d("logolunk", courseID + " idju kurzus assignment5");
+						((CanvasAssignmentsController)assignmentsController).makeAPICall(course);
 					}
-				});
-				break;
-			}
+
+					final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe);
+
+					swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+						@Override
+						public void onRefresh() {
+							if (!CheckNetwork.isNetworkOnline(getActivity())) {
+								swipeView.setRefreshing(false);
+								Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
+							} else {
+								AssignmentsController assignmentsController;
+								assignmentsController = cf.getAssignmentsController2();
+								((CanvasAssignmentsController) assignmentsController).setContext(courseActivity);
+								assignmentsController.setSharedPreferences(sp);
+								RestInformation.clearData();
+
+								// assignmentsController.setPlaceholderFragment(this);
+								assignmentsController.addInformationListener(new InformationListener() {
+
+									@Override
+									public void onComplete(
+											InformationEvent e) {
+										AssignmentsController ad = (AssignmentsController) e.getSource();
+
+										setProgressGone();
+										setAssignments(ad.getData());
+										assignmentsAdapter = new CustomArrayAdapterAssignments(getActivity(), assignments);
+										list.setAdapter(assignmentsAdapter);
+										swipeView.setRefreshing(false);
+									}
+								});
+								Log.d("logolunk", courseID + " idju kurzus assignment3");
+//							while (course == null) {
+//								course = (cc).getCourseByID(courseID);
+//							}
+								Log.d("logolunk", courseID + " idju kurzus assignment4");
+								((CanvasAssignmentsController) assignmentsController).makeAPICall(course);
+							}
+						}
+					});
+					break;
+				}
+
 			//activity stream
 			case 3: {
 				rootView = inflater.inflate(R.layout.fragment_assignment, null);
@@ -686,105 +779,107 @@ public class CourseActivity extends BaseActivity implements ActionBar.TabListene
 
 				break;
 			}
-			case 5: {
-				QuizController quizController;
-				rootView = inflater.inflate(R.layout.fragment_assignment, null);
+				case 5: {
+					QuizController quizController;
+					rootView = inflater.inflate(R.layout.fragment_assignment, null);
 
-				// Set the progressbar visibility
-				list = (ListView) rootView.findViewById(R.id.list);
-				viewContainer = rootView.findViewById(R.id.linProg);
-				viewContainer.setVisibility(View.VISIBLE);
-				list.setOnItemClickListener(new OnItemClickListener() {
+					// Set the progressbar visibility
+					list = (ListView) rootView.findViewById(R.id.list);
+					viewContainer = rootView.findViewById(R.id.linProg);
+					viewContainer.setVisibility(View.VISIBLE);
+					list.setOnItemClickListener(new OnItemClickListener() {
 
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view,
-											int position, long id) {
-						Quiz quiz = quizzes.get(position);
+						@Override
+						public void onItemClick(AdapterView<?> parent, View view,
+												int position, long id) {
+							Quiz quiz = quizzes.get(position);
 
-						if (swipeView != null)
-							swipeView.setRefreshing(false);
+							if (swipeView != null)
+								swipeView.setRefreshing(false);
 
-						if (!CheckNetwork.isNetworkOnline(getActivity())) {
-							Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
-						} else {
-							Intent quizIntent = new Intent(getActivity(), QuizActivity.class);
+							if (!CheckNetwork.isNetworkOnline(getActivity())) {
+								Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
+							} else {
+								Intent quizIntent = new Intent(getActivity(), QuizActivity.class);
 
-							Bundle bundle = new Bundle();
-							bundle.putInt("course_id", (int) quiz.getId());
-							bundle.putInt("assignment_id", (int) quiz.getId());
-							quizIntent.putExtras(bundle);
-							startActivity(quizIntent);
+								Bundle bundle = new Bundle();
+								bundle.putInt("course_id", (int) quiz.getId());
+								bundle.putInt("assignment_id", (int) quiz.getId());
+								quizIntent.putExtras(bundle);
+								startActivity(quizIntent);
+							}
 						}
-					}
-				});
+					});
 
-				quizzes = new ArrayList<>();
-				quizController = cf.getQuizController();
-				Log.d("logolunk", "quiz controller created");
-				((CanvasQuizController)quizController).setContext(courseActivity);
-				Log.d("logolunk", "quiz controller activity set");
-				quizController.setSharedPreferences(sp);
-				quizController.addInformationListener(new InformationListener() {
+					quizzes = new ArrayList<>();
+					quizController = cf.getQuizController();
+					((CanvasQuizController)quizController).setContext(courseActivity);
+					quizController.setSharedPreferences(sp);
+					quizController.addInformationListener(new InformationListener() {
 
-					@Override
-					public void onComplete(InformationEvent e) {
-						QuizController ad = (QuizController) e.getSource();
+						@Override
+						public void onComplete(InformationEvent e) {
+							QuizController ad = (QuizController) e.getSource();
+							setProgressGone();
+							setQuizzes(ad.getData());
+							quizzesAdapter = new CustomArrayAdapterQuizzes(getActivity(), quizzes);
+							list.setAdapter(quizzesAdapter);
+						}
+					});
+
+					if(!CheckNetwork.isNetworkOnline(getActivity())) {
 						setProgressGone();
-						setQuizzes(ad.getData());
-						quizzesAdapter = new CustomArrayAdapterQuizzes(getActivity(), quizzes);
-						list.setAdapter(quizzesAdapter);
+					} else {
+//						Log.d("logolunk", courseID + " idju kurzus quiz");
+//						while (course == null || courseID != course.getId()) {
+//							course = ((CanvasCoursesController)cc).getCourseByID(courseID);
+//						}
+//						((CanvasQuizController)quizController).makeAPICall(course);
+//						Log.d("logolunk", "make api call terminated");
 					}
-				});
 
-				if(!CheckNetwork.isNetworkOnline(getActivity())) {
-					setProgressGone();
-				} else {
-					Log.d("logolunk", courseID + " idju kurzus quiz");
-					while (course == null) {
-						course = ((CanvasCoursesController)cc).getCourseByID(courseID);
-					}
-					((CanvasQuizController)quizController).makeAPICall(course);
-					Log.d("logolunk", "make api call terminated");
+					swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe);
+					swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+						@Override
+						public void onRefresh() {
+							if(!CheckNetwork.isNetworkOnline(getActivity())) {
+								swipeView.setRefreshing(false);
+								Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
+							} else {
+								QuizController quizController;
+								quizController = cf.getQuizController();
+								((CanvasQuizController)quizController).setContext(courseActivity);
+								quizController.setSharedPreferences(sp);
+								RestInformation.clearData();
+
+								quizController.addInformationListener(new InformationListener() {
+
+									@Override
+									public void onComplete(InformationEvent e) {
+										QuizController ad = (QuizController) e.getSource();
+										setProgressGone();
+										setQuizzes(ad.getData());
+										quizzesAdapter = new CustomArrayAdapterQuizzes(getActivity(), quizzes);
+										list.setAdapter(quizzesAdapter);
+										swipeView.setRefreshing(false);
+									}
+								});
+								Log.d("logolunk", courseID + " idju kurzus quiz");
+								while (course == null || courseID != course.getId()) {
+									course = ((CanvasCoursesController)cc).getCourseByID(courseID);
+								}
+								((CanvasQuizController)quizController).makeAPICall(course);
+							}
+						}
+					});
+					break;
 				}
 
-				swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe);
-				swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-					@Override
-					public void onRefresh() {
-						if(!CheckNetwork.isNetworkOnline(getActivity())) {
-							swipeView.setRefreshing(false);
-							Toast.makeText(getActivity(), "No network connection!", Toast.LENGTH_LONG).show();
-						} else {
-							QuizController quizController;
-							quizController = cf.getQuizController();
-							((CanvasQuizController)quizController).setContext(courseActivity);
-							quizController.setSharedPreferences(sp);
-							RestInformation.clearData();
 
-							quizController.addInformationListener(new InformationListener() {
 
-								@Override
-								public void onComplete(InformationEvent e) {
-									QuizController ad = (QuizController) e.getSource();
-									setProgressGone();
-									setQuizzes(ad.getData());
-									quizzesAdapter = new CustomArrayAdapterQuizzes(getActivity(), quizzes);
-									list.setAdapter(quizzesAdapter);
-									swipeView.setRefreshing(false);
-								}
-							});
-							Log.d("logolunk", courseID + " idju kurzus quiz");
-							while (course == null) {
-								course = ((CanvasCoursesController)cc).getCourseByID(courseID);
-							}
-							((CanvasQuizController)quizController).makeAPICall(course);
-						}
-					}
-				});
-				break;
-			}
 			default:
 			rootView = inflater.inflate(R.layout.fragment_course, null);
+				Log.d("logolunk", "38");
 			}
 
 			return rootView;
@@ -794,6 +889,7 @@ public class CourseActivity extends BaseActivity implements ActionBar.TabListene
 		public void onStop() {
 			if (downloadManager != null)
 				downloadManager.unRegisterReceiver();
+			Log.d("logolunk", "39");
 			super.onStop();
 		}
 
@@ -812,7 +908,9 @@ public class CourseActivity extends BaseActivity implements ActionBar.TabListene
 
 		public void setFileTreeElements(List<FileTreeElement> fileTreeElements) {
 			this.fileTreeElements = fileTreeElements;
+			Log.d("logolunk", "40");
 			fileTreeElements.set(0, folderStack.getHeadParent());
+			Log.d("logolunk", "41");
 		}
 
 		// Hide progressbar

@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import edu.ubbcluj.canvas.controller.canvasAPI.CanvasAssignmentsController;
 import edu.ubbcluj.canvasAndroid.R;
 import edu.ubbcluj.canvas.controller.AssignmentsController;
 import edu.ubbcluj.canvas.controller.ControllerFactory;

@@ -2,6 +2,8 @@ package edu.ubbcluj.canvas.controller;
 
 import android.content.Context;
 
+import edu.ubbcluj.canvas.controller.canvasAPI.CanvasAssignmentsController;
+import edu.ubbcluj.canvas.controller.canvasAPI.CanvasCoursesController;
 import edu.ubbcluj.canvas.controller.rest.RestApiControllerFactory;
 
 public abstract class ControllerFactory {
@@ -14,8 +16,9 @@ public abstract class ControllerFactory {
 	public abstract ActivityStreamController getDashboardController2();
 	public abstract ActivityStreamSummaryController getActivityStreamSummaryController();
 	public abstract CoursesController getCoursesController();
-	public abstract CoursesController getCoursesController2();
+	public abstract CanvasCoursesController getCoursesController2();
 	public abstract AssignmentsController getAssignmentsController();
+	public abstract CanvasAssignmentsController getAssignmentsController2();
 	public abstract ToDoController getToDoController();
 	public abstract AnnouncementController getAnnouncementController();
 	public abstract AnnouncementCommentController getAnnouncementCommentController();

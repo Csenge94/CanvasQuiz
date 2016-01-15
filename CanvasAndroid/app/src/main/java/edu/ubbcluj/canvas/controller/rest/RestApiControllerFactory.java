@@ -13,6 +13,7 @@ import edu.ubbcluj.canvas.controller.NewMessageController;
 import edu.ubbcluj.canvas.controller.QuizController;
 import edu.ubbcluj.canvas.controller.SubmissionCommentController;
 import edu.ubbcluj.canvas.controller.ToDoController;
+import edu.ubbcluj.canvas.controller.canvasAPI.CanvasAssignmentsController;
 import edu.ubbcluj.canvas.controller.canvasAPI.CanvasCoursesController;
 import edu.ubbcluj.canvas.controller.canvasAPI.CanvasDashboardController;
 import edu.ubbcluj.canvas.controller.canvasAPI.CanvasQuizController;
@@ -35,7 +36,7 @@ public class RestApiControllerFactory extends ControllerFactory {
 	}
 
 	@Override
-	public CoursesController getCoursesController2() {
+	public CanvasCoursesController getCoursesController2() {
 		return new CanvasCoursesController();
 	}
 
@@ -48,6 +49,12 @@ public class RestApiControllerFactory extends ControllerFactory {
 	public AssignmentsController getAssignmentsController() {
 		return new RestAssignmentsController();
 	}
+
+	@Override
+	public CanvasAssignmentsController getAssignmentsController2() {
+		return new CanvasAssignmentsController();
+	}
+
 
 	@Override
 	public ToDoController getToDoController() {

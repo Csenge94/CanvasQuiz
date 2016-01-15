@@ -30,15 +30,15 @@ public class DashBoardActivity extends BaseActivity {
 	private List<ActivityStream> activityStream;
 
 	private CustomArrayAdapterActivityStream adapter;
-	
+
 	private ListView list;
 	private View viewContainer;
 
 	private SwipeRefreshLayout swipeView = null;
-	
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		// Set the progressbar visibility 
 		list = (ListView) findViewById(R.id.list);
 		viewContainer = findViewById(R.id.linProg);
@@ -46,13 +46,13 @@ public class DashBoardActivity extends BaseActivity {
 
 		// Get the activity stream
 		cf = ControllerFactory.getInstance();
-		
+
 		ActivityStreamController dashboardController;
 		dashboardController = cf.getDashboardController2();
 		((CanvasDashboardController)dashboardController).setContext(this);
 		dashboardController.setSharedPreferences(DashBoardActivity.this.getSharedPreferences(
 				"CanvasAndroid", Context.MODE_PRIVATE));
-		
+
 		activityStream = new ArrayList<>();
 
 		list.setOnItemClickListener(new OnItemClickListener() {
@@ -128,24 +128,24 @@ public class DashBoardActivity extends BaseActivity {
 
 		// Initialize the dashboard list
 		setList();
-		
+
 		swipeView = (SwipeRefreshLayout) findViewById(R.id.swipe);
-        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-        	
-        	@Override
-        	public void onRefresh() {
-        		if(!CheckNetwork.isNetworkOnline(DashBoardActivity.this)) {
-        			swipeView.setRefreshing(false);
+		swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+			@Override
+			public void onRefresh() {
+				if(!CheckNetwork.isNetworkOnline(DashBoardActivity.this)) {
+					swipeView.setRefreshing(false);
 					Toast.makeText(DashBoardActivity.this, "No network connection!", Toast.LENGTH_LONG).show();
-        		} else {
-	        		ActivityStreamController dashboardController;
-	        		dashboardController = cf.getDashboardController2();
+				} else {
+					ActivityStreamController dashboardController;
+					dashboardController = cf.getDashboardController2();
 					((CanvasDashboardController)dashboardController).setContext(DashBoardActivity.this);
-	        		dashboardController.setSharedPreferences(DashBoardActivity.this.getSharedPreferences(
+					dashboardController.setSharedPreferences(DashBoardActivity.this.getSharedPreferences(
 							"CanvasAndroid", Context.MODE_PRIVATE));
-	        		RestInformation.clearData();
-	        		
-	        		dashboardController.addInformationListener(new InformationListener() {
+					RestInformation.clearData();
+
+					dashboardController.addInformationListener(new InformationListener() {
 
 						@Override
 						public void onComplete(InformationEvent e) {
@@ -159,8 +159,8 @@ public class DashBoardActivity extends BaseActivity {
 					});
 					((CanvasDashboardController)dashboardController).makeApiCall();
 				}
-        	} 	
-    	});
+			}
+		});
 	}
 
 	@Override
@@ -200,10 +200,10 @@ public class DashBoardActivity extends BaseActivity {
 		}
 	}
 
-/*	public List<ActivityStream> getActivityStream() {
-		return activityStream;
-	}
-*/
+	/*	public List<ActivityStream> getActivityStream() {
+            return activityStream;
+        }
+    */
 	public void setActivityStream(List<ActivityStream> activityStream) {
 		this.activityStream = activityStream;
 		setList();
